@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bracket Battle | Sports Simulator</title>
+
+<style>
+:root {
+  --bg: #101827;
+  --panel: #1b293b;
+  --panel-light: #26364b;
+  --accent: #f5a623;
+  --text: #f8fafc;
+  --muted: #aab6c5;
+  --border: #34445a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 22px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hero {
+  text-align: center;
+  padding: 75px 20px 55px;
+  background: radial-gradient(ellipse at top, #263a54, var(--bg) 70%);
+}
+
+.hero-label {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+h1 {
+  font-size: clamp(38px, 7vw, 66px);
+  margin: 18px 0 12px;
+  letter-spacing: -2px;
+}
+
+h1 span {
+  color: var(--accent);
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 17px;
+  max-width: 550px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 1050px;
+  margin: auto;
+  padding: 20px 20px 70px;
+}
+
+.section-heading {
+  margin: 35px 0 18px;
+  font-size: 20px;
+}
+
+.sports {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.sport {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 23px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.sport:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.sport.selected {
+  border-color: var(--accent);
+  background: #303b48;
+}
+
+.sport-icon {
+  font-size: 35px;
+  margin-bottom: 12px;
+}
+
+.sport-name {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.sport-status {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.options {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-top: 28px;
+}
+
+.sizes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.size-option {
+  background: var(--panel-light);
+  border: 2px solid var(--border);
+  color: white;
+  padding: 13px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.size-option.selected {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.primary-button {
+  background: var(--accent);
+  color: #17202c;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 30px;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 25px;
+}
+
+.primary-button:hover {
+  background: #ffc15c;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media(max-width:600px) {
+  header {
+    padding: 18px;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .sports {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero {
+    padding: 55px 18px 35px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">BRACKET<span>BATTLE</span></div>
+  <div class="tagline">PICK YOUR TEAMS. PLAY IT OUT.</div>
+</header>
+
+<section class="hero">
+  <div class="hero-label">YOUR TOURNAMENT STARTS HERE</div>
+  <h1>WHO WILL BE <span>CHAMPION?</span></h1>
+  <p>
+    Pick your sport. Choose your teams.
+    Simulate the matchups and see who takes home the trophy.
+  </p>
+</section>
+
+<main>
+
+  <h2 class="section-heading">01 / Choose Your Sport</h2>
+
+  <div class="sports">
+    <div class="sport selected" onclick="selectSport(this)">
+      <div class="sport-icon">🏈</div>
+      <div class="sport-name">NFL</div>
+      <div class="sport-status">Football</div>
+    </div>
+
+    <div class="sport" onclick="selectSport(this)">
+      <div class="sport-icon">🏀</div>
+      <div class="sport-name">NBA</div>
+      <div class="sport-status">Basketball</div>
+    </div>
+
+    <div class="sport" onclick="selectSport(this)">
+      <div class="sport-icon">⚾</div>
+      <div class="sport-name">MLB</div>
+      <div class="sport-status">Baseball</div>
+    </div>
+
+    <div class="sport" onclick="selectSport(this)">
+      <div class="sport-icon">🏒</div>
+      <div class="sport-name">NHL</div>
+      <div class="sport-status">Hockey</div>
+    </div>
+
+    <div class="sport" onclick="selectSport(this)">
+      <div class="sport-icon">⚽</div>
+      <div class="sport-name">Soccer</div>
+      <div class="sport-status">International</div>
+    </div>
+
+    <div class="sport" onclick="selectSport(this)">
+      <div class="sport-icon">🏆</div>
+      <div class="sport-name">College</div>
+      <div class="sport-status">College Sports</div>
+    </div>
+  </div>
+
+  <div class="options">
+    <h2 class="section-heading">02 / Tournament Size</h2>
+    <p style="color:var(--muted); margin-bottom:18px;">
+      How many teams will compete?
+    </p>
+
+    <div class="sizes">
+      <button class="size-option selected" onclick="selectSize(this)">4 Teams</button>
+      <button class="size-option" onclick="selectSize(this)">8 Teams</button>
+      <button class="size-option" onclick="selectSize(this)">16 Teams</button>
+    </div>
+
+    <button class="primary-button" onclick="startTournament()">
+      CREATE MY TOURNAMENT →
+    </button>
+  </div>
+
+</main>
+
+<footer>
+  BRACKET BATTLE · PICK YOUR TEAMS. PLAY IT OUT.
+</footer>
+
+<script>
+function selectSport(element) {
+  document.querySelectorAll(".sport").forEach(item => {
+    item.classList.remove("selected");
+  });
+
+  element.classList.add("selected");
+}
+
+function selectSize(element) {
+  document.querySelectorAll(".size-option").forEach(item => {
+    item.classList.remove("selected");
+  });
+
+  element.classList.add("selected");
+}
+
+function startTournament() {
+  alert("Your tournament setup is coming next!");
+}
+</script>
+
+</body>
+</html>
