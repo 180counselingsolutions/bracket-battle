@@ -16,6 +16,7 @@
   --muted: #aab6c5;
   --border: #34445a;
   --green: #39c98a;
+  --blue: #48a9e8;
 }
 
 * { box-sizing: border-box; }
@@ -59,7 +60,7 @@ header {
 
 .container {
   width: 92%;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto 50px;
 }
 
@@ -130,11 +131,67 @@ h2 { margin-top: 0; font-size: 21px; }
   margin: 12px 0;
 }
 
+/* DIVISION SELECTION */
+
+.conference-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 30px 0 15px;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.conference-heading::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--border);
+}
+
+.conference-heading.afc,
+.conference-heading.east {
+  color: #65b9f0;
+}
+
+.conference-heading.nfc,
+.conference-heading.west {
+  color: #f0ad4e;
+}
+
+.division-section {
+  margin-bottom: 24px;
+  background: #152235;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.division-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1.3px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.division-heading span:last-child {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #74869b;
+}
+
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
   gap: 9px;
-  margin-top: 18px;
 }
 
 .team {
@@ -146,6 +203,11 @@ h2 { margin-top: 0; font-size: 21px; }
   text-align: left;
   cursor: pointer;
   font-size: 14px;
+  transition: border-color .15s, background .15s;
+}
+
+.team:hover:not(:disabled) {
+  border-color: #71849b;
 }
 
 .team.selected {
@@ -153,7 +215,10 @@ h2 { margin-top: 0; font-size: 21px; }
   background: #203b39;
 }
 
-.team:disabled { opacity: .35; cursor: not-allowed; }
+.team:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
 
 .team-rating {
   display: block;
@@ -171,7 +236,13 @@ h2 { margin-top: 0; font-size: 21px; }
   color: var(--muted);
   font-size: 12px;
   line-height: 1.5;
-  margin-top: 12px;
+  margin-top: 18px;
+}
+
+.rating-source {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 8px;
 }
 
 .top-actions {
@@ -244,6 +315,42 @@ h2 { margin-top: 0; font-size: 21px; }
   margin: 10px 0;
 }
 
+/* COUNTDOWN */
+
+.countdown-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 10px;
+  margin: 12px 0;
+  background: linear-gradient(145deg, #263b54, #111d2d);
+  border: 1px solid #52657d;
+  border-radius: 10px;
+}
+
+.countdown-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
+}
+
+.countdown-number {
+  color: var(--accent);
+  font-size: 55px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 0 0 22px rgba(245,166,35,.35);
+  animation: countdownPop .65s ease;
+}
+
+@keyframes countdownPop {
+  0% { transform: scale(1.5); opacity: .3; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 .game-button {
   width: 100%;
   margin-top: 8px;
@@ -278,16 +385,23 @@ h2 { margin-top: 0; font-size: 21px; }
   line-height: 1.5;
 }
 
-.rating-source {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 8px;
-}
-
 @media (max-width: 600px) {
-  .sport-grid, .size-grid { grid-template-columns: repeat(2, 1fr); }
+  .sport-grid, .size-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .panel { padding: 17px; }
+
   .top-actions button { flex: 1; }
+
+  .team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .team {
+    padding: 11px 9px;
+    font-size: 12px;
+  }
 }
 </style>
 </head>
@@ -332,20 +446,21 @@ h2 { margin-top: 0; font-size: 21px; }
     <h2>Choose Your Teams</h2>
 
     <p class="note">
-      Select the teams you want competing in your tournament.
-      Each team has a strength rating based on real-world performance.
+      Pick your favorite teams or build your own dream tournament.
+      Each team has a strength rating to help guide your picks.
     </p>
 
     <div class="counter" id="counter">0 of 8 teams selected</div>
 
-    <div class="team-grid" id="teamGrid"></div>
+    <div id="teamGrid"></div>
 
     <div class="rating-legend">
       Team strength: 90+ Elite | 80s Strong | 70s Average | Below 70 Struggling
     </div>
 
     <div class="rating-source">
-      Ratings based on 2026 season performance snapshots.
+      Strength ratings are estimates based on a manually ordered team ranking.
+      They are not official ratings or live statistics.
     </div>
 
     <button class="primary full" id="buildButton" disabled>
@@ -433,16 +548,92 @@ const teams = {
   ]
 };
 
-/*
-  Team rankings are ordered strongest to weakest using
-  the available 2026 season records and scoring differentials.
+/* TEAM DIVISIONS */
 
-  Ratings are generated from the ranking position.
-  These are performance-based estimates, not official ratings.
+const divisions = {
+  NFL: [
+    {
+      conference: "AFC",
+      groups: [
+        { name: "AFC East", teams: ["Buffalo Bills","Miami Dolphins","New England Patriots","New York Jets"] },
+        { name: "AFC North", teams: ["Baltimore Ravens","Cincinnati Bengals","Cleveland Browns","Pittsburgh Steelers"] },
+        { name: "AFC South", teams: ["Houston Texans","Indianapolis Colts","Jacksonville Jaguars","Tennessee Titans"] },
+        { name: "AFC West", teams: ["Denver Broncos","Kansas City Chiefs","Las Vegas Raiders","Los Angeles Chargers"] }
+      ]
+    },
+    {
+      conference: "NFC",
+      groups: [
+        { name: "NFC East", teams: ["Dallas Cowboys","New York Giants","Philadelphia Eagles","Washington Commanders"] },
+        { name: "NFC North", teams: ["Chicago Bears","Detroit Lions","Green Bay Packers","Minnesota Vikings"] },
+        { name: "NFC South", teams: ["Atlanta Falcons","Carolina Panthers","New Orleans Saints","Tampa Bay Buccaneers"] },
+        { name: "NFC West", teams: ["Arizona Cardinals","Los Angeles Rams","San Francisco 49ers","Seattle Seahawks"] }
+      ]
+    }
+  ],
+
+  NBA: [
+    {
+      conference: "Eastern Conference",
+      groups: [
+        { name: "Atlantic Division", teams: ["Boston Celtics","Brooklyn Nets","New York Knicks","Philadelphia 76ers","Toronto Raptors"] },
+        { name: "Central Division", teams: ["Chicago Bulls","Cleveland Cavaliers","Detroit Pistons","Indiana Pacers","Milwaukee Bucks"] },
+        { name: "Southeast Division", teams: ["Atlanta Hawks","Charlotte Hornets","Miami Heat","Orlando Magic","Washington Wizards"] }
+      ]
+    },
+    {
+      conference: "Western Conference",
+      groups: [
+        { name: "Northwest Division", teams: ["Denver Nuggets","Minnesota Timberwolves","Oklahoma City Thunder","Portland Trail Blazers","Utah Jazz"] },
+        { name: "Pacific Division", teams: ["Golden State Warriors","LA Clippers","Los Angeles Lakers","Phoenix Suns","Sacramento Kings"] },
+        { name: "Southwest Division", teams: ["Dallas Mavericks","Houston Rockets","Memphis Grizzlies","New Orleans Pelicans","San Antonio Spurs"] }
+      ]
+    }
+  ],
+
+  MLB: [
+    {
+      conference: "American League",
+      groups: [
+        { name: "AL East", teams: ["Baltimore Orioles","Boston Red Sox","New York Yankees","Tampa Bay Rays","Toronto Blue Jays"] },
+        { name: "AL Central", teams: ["Chicago White Sox","Cleveland Guardians","Detroit Tigers","Kansas City Royals","Minnesota Twins"] },
+        { name: "AL West", teams: ["Athletics","Houston Astros","Los Angeles Angels","Seattle Mariners","Texas Rangers"] }
+      ]
+    },
+    {
+      conference: "National League",
+      groups: [
+        { name: "NL East", teams: ["Atlanta Braves","Miami Marlins","New York Mets","Philadelphia Phillies","Washington Nationals"] },
+        { name: "NL Central", teams: ["Chicago Cubs","Cincinnati Reds","Milwaukee Brewers","Pittsburgh Pirates","St. Louis Cardinals"] },
+        { name: "NL West", teams: ["Arizona Diamondbacks","Colorado Rockies","Los Angeles Dodgers","San Diego Padres","San Francisco Giants"] }
+      ]
+    }
+  ],
+
+  NHL: [
+    {
+      conference: "Eastern Conference",
+      groups: [
+        { name: "Atlantic Division", teams: ["Boston Bruins","Buffalo Sabres","Detroit Red Wings","Florida Panthers","Montreal Canadiens","Ottawa Senators","Tampa Bay Lightning","Toronto Maple Leafs"] },
+        { name: "Metropolitan Division", teams: ["Carolina Hurricanes","Columbus Blue Jackets","New Jersey Devils","New York Islanders","New York Rangers","Philadelphia Flyers","Pittsburgh Penguins","Washington Capitals"] }
+      ]
+    },
+    {
+      conference: "Western Conference",
+      groups: [
+        { name: "Central Division", teams: ["Chicago Blackhawks","Colorado Avalanche","Dallas Stars","Minnesota Wild","Nashville Predators","St. Louis Blues","Utah Mammoth","Winnipeg Jets"] },
+        { name: "Pacific Division", teams: ["Anaheim Ducks","Calgary Flames","Edmonton Oilers","Los Angeles Kings","San Jose Sharks","Seattle Kraken","Vancouver Canucks","Vegas Golden Knights"] }
+      ]
+    }
+  ]
+};
+
+/*
+  Ratings are manually ordered estimates.
+  They are not live standings or official team ratings.
 */
 
 const strengthOrder = {
-
   NFL: `
     Buffalo Bills|San Francisco 49ers|Jacksonville Jaguars|
     Cincinnati Bengals|Kansas City Chiefs|Denver Broncos|
@@ -537,6 +728,8 @@ function showScreen(screen) {
   });
 }
 
+/* SPORT AND SIZE BUTTONS */
+
 document.querySelectorAll("[data-sport]").forEach(button => {
   button.addEventListener("click", () => {
     selectedSport = button.dataset.sport;
@@ -567,32 +760,76 @@ $("continueButton").addEventListener("click", () => {
   showScreen("selectionScreen");
 });
 
+/* TEAM SELECTION BY DIVISION */
+
 function renderTeams() {
   $("teamGrid").innerHTML = "";
 
-  teams[selectedSport].forEach(team => {
-    const button = document.createElement("button");
-    button.className = "team";
-    button.dataset.team = team;
+  divisions[selectedSport].forEach(conference => {
+    const conferenceHeading = document.createElement("div");
+    conferenceHeading.className = "conference-heading";
 
-    const name = document.createElement("span");
-    name.textContent = team;
+    if (conference.conference.includes("AFC")) {
+      conferenceHeading.classList.add("afc");
+    } else if (conference.conference.includes("NFC")) {
+      conferenceHeading.classList.add("nfc");
+    } else if (conference.conference.includes("Eastern") ||
+               conference.conference.includes("American")) {
+      conferenceHeading.classList.add("east");
+    } else {
+      conferenceHeading.classList.add("west");
+    }
 
-    const rating = document.createElement("span");
-    rating.className = "team-rating";
+    conferenceHeading.textContent = conference.conference;
+    $("teamGrid").appendChild(conferenceHeading);
 
-    const ratingNumber = document.createElement("span");
-    ratingNumber.className = "rating-number";
-    ratingNumber.textContent = teamRatings[team];
+    conference.groups.forEach(division => {
+      const section = document.createElement("div");
+      section.className = "division-section";
 
-    rating.textContent = "STRENGTH RATING: ";
-    rating.appendChild(ratingNumber);
+      const heading = document.createElement("div");
+      heading.className = "division-heading";
 
-    button.append(name, rating);
+      const divisionName = document.createElement("span");
+      divisionName.textContent = division.name;
 
-    button.addEventListener("click", () => toggleTeam(team));
+      const teamCount = document.createElement("span");
+      teamCount.textContent = `${division.teams.length} TEAMS`;
 
-    $("teamGrid").appendChild(button);
+      heading.append(divisionName, teamCount);
+      section.appendChild(heading);
+
+      const grid = document.createElement("div");
+      grid.className = "team-grid";
+
+      division.teams.forEach(team => {
+        const button = document.createElement("button");
+        button.className = "team";
+        button.dataset.team = team;
+
+        const name = document.createElement("span");
+        name.textContent = team;
+
+        const rating = document.createElement("span");
+        rating.className = "team-rating";
+
+        const ratingNumber = document.createElement("span");
+        ratingNumber.className = "rating-number";
+        ratingNumber.textContent = teamRatings[team];
+
+        rating.textContent = "STRENGTH RATING: ";
+        rating.appendChild(ratingNumber);
+
+        button.append(name, rating);
+
+        button.addEventListener("click", () => toggleTeam(team));
+
+        grid.appendChild(button);
+      });
+
+      section.appendChild(grid);
+      $("teamGrid").appendChild(section);
+    });
   });
 
   updateSelection();
@@ -615,7 +852,7 @@ function updateSelection() {
   $("buildButton").disabled =
     selectedTeams.length !== tournamentSize;
 
-  [...$("teamGrid").children].forEach(button => {
+  document.querySelectorAll(".team").forEach(button => {
     const team = button.dataset.team;
     const selected = selectedTeams.includes(team);
 
@@ -630,6 +867,8 @@ function updateSelection() {
 $("backToSetup").addEventListener("click", () =>
   showScreen("setupScreen")
 );
+
+/* BRACKET CREATION */
 
 function shuffle(items) {
   const result = [...items];
@@ -664,6 +903,7 @@ $("buildButton").addEventListener("click", () => {
 
   currentRound = 0;
   champion = null;
+  isSimulating = false;
 
   $("championArea").innerHTML = "";
 
@@ -671,7 +911,7 @@ $("buildButton").addEventListener("click", () => {
     `${selectedSport} TOURNAMENT`;
 
   $("tournamentDescription").textContent =
-    `${tournamentSize} teams. Real-world strength ratings. One champion.`;
+    `${tournamentSize} teams. One bracket. One champion.`;
 
   $("overallStatus").textContent =
     "Your matchups are ready. Let the games begin!";
@@ -688,22 +928,18 @@ function makeGame(team1, team2) {
     score2: null,
     winner: null,
     simulated: false,
-    running: false
+    running: false,
+    countdown: null
   };
 }
+
+/* GAME SIMULATION */
 
 function chooseWinner(team1, team2) {
   const rating1 = teamRatings[team1];
   const rating2 = teamRatings[team2];
 
   const difference = rating1 - rating2;
-
-  /*
-    A rating difference creates an advantage,
-    but it never guarantees a win.
-
-    This allows realistic upsets.
-  */
 
   const team1Chance =
     1 / (1 + Math.exp(-difference / 11));
@@ -716,18 +952,9 @@ function randomInt(min, max) {
 }
 
 function scoreForSport() {
-  if (selectedSport === "NFL") {
-    return randomInt(10, 35);
-  }
-
-  if (selectedSport === "NBA") {
-    return randomInt(90, 125);
-  }
-
-  if (selectedSport === "MLB") {
-    return randomInt(1, 8);
-  }
-
+  if (selectedSport === "NFL") return randomInt(10, 35);
+  if (selectedSport === "NBA") return randomInt(90, 125);
+  if (selectedSport === "MLB") return randomInt(1, 8);
   return randomInt(1, 6);
 }
 
@@ -751,7 +978,7 @@ function wait(ms) {
 }
 
 async function simulateGame(roundIndex, gameIndex) {
-  const game = rounds[roundIndex].games[gameIndex];
+  const game = rounds[roundIndex]?.games[gameIndex];
 
   if (!game || game.simulated || isSimulating) return;
 
@@ -760,12 +987,27 @@ async function simulateGame(roundIndex, gameIndex) {
 
   renderBracket();
 
-  for (let count = 3; count >= 1; count--) {
-    $("overallStatus").textContent =
-      `Game starting in ${count}...`;
+  /* THE 3-2-1 COUNTDOWN */
 
-    await wait(450);
+  for (let count = 3; count >= 1; count--) {
+    game.countdown = count;
+
+    $("overallStatus").textContent =
+      `GET READY... ${count}`;
+
+    renderBracket();
+
+    await wait(750);
   }
+
+  game.countdown = "GO!";
+  $("overallStatus").textContent = "HERE WE GO!";
+
+  renderBracket();
+
+  await wait(450);
+
+  /* REVEAL THE RESULT */
 
   game.winner = chooseWinner(game.team1, game.team2);
 
@@ -777,6 +1019,7 @@ async function simulateGame(roundIndex, gameIndex) {
   game.score2 = score2;
   game.simulated = true;
   game.running = false;
+  game.countdown = null;
 
   $("overallStatus").textContent =
     `${game.winner} wins!`;
@@ -832,6 +1075,8 @@ function checkRoundComplete() {
   renderBracket();
 }
 
+/* BRACKET DISPLAY */
+
 function renderBracket() {
   $("bracketRounds").innerHTML = "";
 
@@ -871,13 +1116,31 @@ function renderBracket() {
         game.simulated && game.winner !== game.team2
       ));
 
+      /* COUNTDOWN DISPLAY */
+
+      if (game.running) {
+        const countdownBox = document.createElement("div");
+        countdownBox.className = "countdown-box";
+
+        const label = document.createElement("div");
+        label.className = "countdown-label";
+        label.textContent = "GAME STARTING";
+
+        const number = document.createElement("div");
+        number.className = "countdown-number";
+        number.textContent = game.countdown;
+
+        countdownBox.append(label, number);
+        card.appendChild(countdownBox);
+      }
+
       const status = document.createElement("div");
       status.className = "game-status";
 
       status.textContent = game.simulated
         ? `${game.winner} advances`
         : game.running
-          ? "Game in progress..."
+          ? "Get ready for the result..."
           : "Ready to play";
 
       card.appendChild(status);
@@ -886,7 +1149,9 @@ function renderBracket() {
         const button = document.createElement("button");
 
         button.className = "primary game-button";
-        button.textContent = "SIMULATE GAME";
+        button.textContent = game.running
+          ? "SIMULATING..."
+          : "SIMULATE GAME";
 
         button.disabled =
           isSimulating || roundIndex !== currentRound;
@@ -940,6 +1205,8 @@ function makeTeamLine(name, score, isWinner, isLoser) {
   return line;
 }
 
+/* CHAMPION */
+
 function showChampion() {
   $("championArea").innerHTML = "";
 
@@ -967,22 +1234,28 @@ function showChampion() {
     `${champion} has won the tournament!`;
 }
 
+/* MAIN BUTTONS */
+
 $("simulateRoundButton").addEventListener(
   "click",
   simulateNextRound
 );
 
 $("changeTeamsButton").addEventListener("click", () => {
+  if (isSimulating) return;
+
   selectedTeams = [];
   renderTeams();
   showScreen("selectionScreen");
 });
 
 $("newTournamentButton").addEventListener("click", () => {
+  if (isSimulating) return;
+
   selectedTeams = [];
   rounds = [];
   champion = null;
-  isSimulating = false;
+  currentRound = 0;
 
   showScreen("setupScreen");
 });
