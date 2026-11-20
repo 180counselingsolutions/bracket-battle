@@ -259,10 +259,31 @@ h2 { margin-top: 0; font-size: 21px; }
 #bracketRounds {
   width: 100%;
   max-width: 100%;
-  overflow-x: auto;
+  overflow-x: scroll;
   overflow-y: hidden;
   box-sizing: border-box;
   padding: 20px 5px 30px;
+  scrollbar-width: auto;
+  scrollbar-color: #d4a843 #263449;
+}
+
+#bracketRounds::-webkit-scrollbar {
+  height: 14px;
+}
+
+#bracketRounds::-webkit-scrollbar-track {
+  background: #263449;
+  border-radius: 10px;
+}
+
+#bracketRounds::-webkit-scrollbar-thumb {
+  background: #d4a843;
+  border-radius: 10px;
+  border: 3px solid #263449;
+}
+
+#bracketRounds::-webkit-scrollbar-thumb:hover {
+  background: #f0c65e;
 }
 
 .bracket-layout {
