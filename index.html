@@ -875,6 +875,7 @@ let rounds = [];
 let currentRound = 0;
 let isSimulating = false;
 let champion = null;
+let tournamentPlayerStats = {};
 
 const $ = id => document.getElementById(id);
 
@@ -1155,7 +1156,96 @@ function generateNFLBoxScore(team,points) {
     receivers:receiverStats
   };
 }
+function recordNFLPlayerStats(team, boxScore) {
+  if (!boxScore) return;
 
+  const qb = boxScore.quarterback;
+
+  const qbKey = `${team}-${qb.name}`;
+
+  if (!tournamentPlayerStats[qbKey]) {
+    tournamentPlayerStats[qbKey] = {
+      name: qb.name,
+      team: team,
+      position: "QB",
+      passYards: 0,
+      passTD: 0,
+      interceptions: 0,
+      rushYards: 0,
+      rushTD: 0,
+      catches: 0,
+      receivingYards: 0,
+      receivingTD: 0
+    };
+  }
+
+  const qbTotal = tournamentPlayerStats[qbKey];
+
+  qbTotal.passYards += qb.passYards;
+  qbTotal.passTD += qb.passTD;
+  qbTotal.interceptions += qb.interceptions;
+
+  const rb = boxScore.runningBack;
+  const rbKey = `${team}-${rb.name}`;
+
+  if (!tournamentPlayerStats[rbKey]) {
+    tournamentPlayerStats[rbKey] = {
+      name: rb.name,
+      team: team,
+      position: "RB",
+      rushYards: 0,
+      rushTD: 0
+    };
+  }
+
+  tournamentPlayerStats[rbKey].rushYards += rb.rushYards;
+  tournamentPlayerStats[rbKey].rushTD += rb.rushTD;
+
+  boxScore.receivers.forEach(receiver => {
+    const key = `${team}-${receiver.name}`;
+
+    if (!tournamentPlayerStats[key]) {
+      tournamentPlayerStats[key] = {
+        name: receiver.name,
+        team: team,
+        position: receiver.position,
+        catches: 0,
+        receivingYards: 0,
+        receivingTD: 0
+      };
+    }
+
+    tournamentPlayerStats[key].catches += receiver.catches;
+    tournamentPlayerStats[key].receivingYards += receiver.yards;
+    tournamentPlayerStats[key].receivingTD += receiver.touchdowns;
+  });
+}
+
+function getTournamentMVP() {
+  const players = Object.values(tournamentPlayerStats);
+
+  if (players.length === 0) return null;
+
+  players.forEach(player => {
+    if (player.position === "QB") {
+      player.mvpPoints =
+        player.passYards / 25 +
+        player.passTD * 4 -
+        player.interceptions * 2;
+    } else if (player.position === "RB") {
+      player.mvpPoints =
+        player.rushYards / 10 +
+        player.rushTD * 6;
+    } else {
+      player.mvpPoints =
+        player.receivingYards / 10 +
+        player.receivingTD * 6 +
+        player.catches * 0.5;
+    }
+  });
+
+  return players.sort((a, b) => b.mvpPoints - a.mvpPoints)[0];
+}
 async function simulateGame(roundIndex,gameIndex) {
   const game = rounds[roundIndex]?.games[gameIndex];
 
@@ -1188,11 +1278,13 @@ async function simulateGame(roundIndex,gameIndex) {
   game.countdown = null;
 
   // Generate a separate fictional box score for NFL games.
-  if (selectedSport === "NFL") {
-    game.boxScore1 = generateNFLBoxScore(game.team1,score1);
-    game.boxScore2 = generateNFLBoxScore(game.team2,score2);
-  }
+ if (selectedSport === "NFL") {
+  game.boxScore1 = generateNFLBoxScore(game.team1,score1);
+  game.boxScore2 = generateNFLBoxScore(game.team2,score2);
 
+  recordNFLPlayerStats(game.team1,game.boxScore1);
+  recordNFLPlayerStats(game.team2,game.boxScore2);
+}
   $("overallStatus").textContent = `${game.winner} wins!`;
   isSimulating = false;
 
@@ -1572,6 +1664,52 @@ function showChampion() {
   subtitle.textContent = `${selectedSport} TOURNAMENT WINNER`;
 
   box.append(trophy,heading,name,subtitle);
+
+  if (selectedSport === "NFL") {
+    const mvp = getTournamentMVP();
+
+    if (mvp) {
+      const divider = document.createElement("hr");
+      divider.style.margin = "25px 0";
+      divider.style.border = "0";
+      divider.style.borderTop = "1px solid #d4a843";
+
+      const mvpHeading = document.createElement("h3");
+      mvpHeading.textContent = "⭐ TOURNAMENT MVP";
+      mvpHeading.style.color = "#f5a623";
+
+      const mvpName = document.createElement("div");
+      mvpName.textContent = mvp.name;
+      mvpName.style.fontSize = "1.4rem";
+      mvpName.style.fontWeight = "bold";
+      mvpName.style.marginTop = "10px";
+
+      const mvpTeam = document.createElement("p");
+      mvpTeam.textContent = `${mvp.position} • ${mvp.team}`;
+
+      const mvpStats = document.createElement("p");
+
+      if (mvp.position === "QB") {
+        mvpStats.textContent =
+          `${mvp.passYards} passing yards • ${mvp.passTD} passing TD • ${mvp.interceptions} INT`;
+      } else if (mvp.position === "RB") {
+        mvpStats.textContent =
+          `${mvp.rushYards} rushing yards • ${mvp.rushTD} TD`;
+      } else {
+        mvpStats.textContent =
+          `${mvp.receivingYards} receiving yards • ${mvp.receivingTD} TD • ${mvp.catches} catches`;
+      }
+
+      box.append(
+        divider,
+        mvpHeading,
+        mvpName,
+        mvpTeam,
+        mvpStats
+      );
+    }
+  }
+
   $("championArea").appendChild(box);
 
   $("overallStatus").textContent = `${champion} has won the tournament!`;
@@ -1591,6 +1729,7 @@ $("simulateRoundButton").addEventListener("click",simulateNextRound);
 $("changeTeamsButton").addEventListener("click",() => {
   if (isSimulating) return;
   selectedTeams = [];
+  tournamentPlayerStats = {};
   renderTeams();
   showScreen("selectionScreen");
 });
@@ -1599,6 +1738,7 @@ $("newTournamentButton").addEventListener("click",() => {
   if (isSimulating) return;
 
   selectedTeams = [];
+  tournamentPlayerStats = {};
   rounds = [];
   champion = null;
   currentRound = 0;
