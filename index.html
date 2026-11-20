@@ -252,25 +252,135 @@ h2 { margin-top: 0; font-size: 21px; }
   margin-bottom: 20px;
 }
 
-.round { margin: 25px 0; }
 
-.round h2 {
+/* TOURNAMENT BRACKET */
+
+#bracketRounds {
+  overflow-x: auto;
+  padding: 20px 5px 30px;
+}
+
+.bracket-layout {
+  display: flex;
+  align-items: stretch;
+  gap: 55px;
+  min-width: max-content;
+  padding: 10px 10px 25px;
+}
+
+.bracket-round-column {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: relative;
+}
+
+.bracket-round-column h2 {
   color: var(--accent);
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  text-align: center;
   border-bottom: 1px solid var(--border);
   padding-bottom: 12px;
+  margin-bottom: 25px;
 }
 
-.matchup-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 14px;
+.bracket-games {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 25px;
 }
 
-.matchup {
+.bracket-game {
+  position: relative;
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bracket-game::after {
+  content: "";
+  position: absolute;
+  right: -56px;
+  top: 50%;
+  width: 55px;
+  height: 2px;
+  background: #71849b;
+}
+
+.bracket-game:last-child::after {
+  display: none;
+}
+
+.bracket-game .matchup-title {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 7px;
+}
+
+.bracket-game .team-line {
+  padding: 7px;
+  margin: 3px 0;
+  font-size: 12px;
+}
+
+.bracket-game .score {
+  font-size: 17px;
+}
+
+.bracket-game .game-status {
+  font-size: 11px;
+  margin: 5px 0;
+}
+
+.bracket-game .game-button {
+  padding: 9px;
+  font-size: 11px;
+}
+
+.bracket-game .countdown-box {
+  padding: 8px;
+}
+
+.bracket-game .countdown-number {
+  font-size: 36px;
+}
+
+.bracket-round-column:last-child .bracket-game {
+  border: 2px solid var(--accent);
+  background: linear-gradient(145deg, #29394b, #1b293b);
+}
+
+.bracket-round-column:last-child .bracket-game::after {
+  display: none;
+}
+
+.bracket-round-column:last-child h2 {
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .bracket-layout {
+    gap: 45px;
+  }
+
+  .bracket-round-column {
+    width: 220px;
+  }
+
+  .bracket-game::after {
+    right: -46px;
+    width: 45px;
+  }
 }
 
 .matchup-title {
