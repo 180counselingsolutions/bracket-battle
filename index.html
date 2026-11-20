@@ -389,6 +389,7 @@ const teams = {
 let selectedSport = "NFL";
 let tournamentSize = 8;
 let selectedTeams = [];
+let teamRatings = {};
 let rounds = [];
 let currentRound = 0;
 let isSimulating = false;
@@ -426,6 +427,7 @@ $("continueButton").addEventListener("click", () => {
 
 function renderTeams() {
   $("teamGrid").innerHTML = "";
+
   teams[selectedSport].forEach(team => {
     const button = document.createElement("button");
     button.className = "team";
@@ -433,6 +435,7 @@ function renderTeams() {
     button.addEventListener("click", () => toggleTeam(team));
     $("teamGrid").appendChild(button);
   });
+
   updateSelection();
 }
 
@@ -442,6 +445,7 @@ function toggleTeam(team) {
   } else if (selectedTeams.length < tournamentSize) {
     selectedTeams.push(team);
   }
+
   updateSelection();
 }
 
@@ -450,11 +454,12 @@ function updateSelection() {
   $("buildButton").disabled = selectedTeams.length !== tournamentSize;
 
   [...$("teamGrid").children].forEach(button => {
-    const selected = selectedTeams.includes(button.textContent);
+    const originalName = button.textContent.replace(/^✓  /, "");
+    const selected = selectedTeams.includes(originalName);
+
     button.classList.toggle("selected", selected);
     button.disabled = !selected && selectedTeams.length >= tournamentSize;
-    button.textContent = (selected ? "✓  " : "") +
-      button.textContent.replace(/^✓  /, "");
+    button.textContent = (selected ? "✓  " : "") + originalName;
   });
 }
 
@@ -462,10 +467,12 @@ $("backToSetup").addEventListener("click", () => showScreen("setupScreen"));
 
 function shuffle(items) {
   const result = [...items];
+
   for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [result[i], result[j]] = [result[j], result[i]];
   }
+
   return result;
 }
 
@@ -477,6 +484,13 @@ function roundName(gameCount) {
 }
 
 $("buildButton").addEventListener("click", () => {
+  // Assign each selected team a hidden strength rating
+  teamRatings = {};
+
+  selectedTeams.forEach(team => {
+    teamRatings[team] = 60 + Math.floor(Math.random() * 40);
+  });
+
   const shuffled = shuffle(selectedTeams);
   const games = [];
 
@@ -487,18 +501,22 @@ $("buildButton").addEventListener("click", () => {
   rounds = [{ name: roundName(games.length), games }];
   currentRound = 0;
   champion = null;
+
   $("championArea").innerHTML = "";
   $("tournamentHeading").textContent = `${selectedSport} TOURNAMENT`;
   $("tournamentDescription").textContent =
-    `${tournamentSize} teams. One champion. Let's find out who wins.`;
+    `${tournamentSize} teams. Hidden team strengths. One champion. Let's find out who wins.`;
+
   $("overallStatus").textContent = "Your matchups are ready. Let the games begin!";
+
   showScreen("bracketScreen");
   renderBracket();
 });
 
 function makeGame(team1, team2) {
   return {
-    team1, team2,
+    team1,
+    team2,
     score1: null,
     score2: null,
     winner: null,
@@ -512,21 +530,42 @@ function scoreForSport() {
     return Math.floor(Math.random() * 8) * 3 +
       Math.floor(Math.random() * 5) * 7;
   }
-  if (selectedSport === "NBA") return 85 + Math.floor(Math.random() * 46);
-  if (selectedSport === "MLB") return Math.floor(Math.random() * 11);
+
+  if (selectedSport === "NBA") {
+    return 85 + Math.floor(Math.random() * 46);
+  }
+
+  if (selectedSport === "MLB") {
+    return Math.floor(Math.random() * 11);
+  }
+
   return Math.floor(Math.random() * 8);
 }
 
-function generateScore() {
+// Determine the winner using each team's hidden rating
+function chooseWinner(team1, team2) {
+  const rating1 = teamRatings[team1];
+  const rating2 = teamRatings[team2];
+
+  const difference = rating1 - rating2;
+
+  // A rating difference creates an advantage, not a guarantee
+  const team1Chance = 1 / (1 + Math.exp(-difference / 15));
+
+  return Math.random() < team1Chance ? team1 : team2;
+}
+
+// Generate scores that match the selected winner
+function generateScore(winnerIsTeam1) {
   let a = scoreForSport();
   let b = scoreForSport();
 
-  if (a === b) {
-    if (selectedSport === "NFL") {
-      a += Math.random() < 0.5 ? 3 : 7;
-    } else {
-      a += 1;
-    }
+  if (winnerIsTeam1 && a <= b) {
+    a = b + (selectedSport === "NFL" ? 3 : 1);
+  }
+
+  if (!winnerIsTeam1 && b <= a) {
+    b = a + (selectedSport === "NFL" ? 3 : 1);
   }
 
   return [a, b];
@@ -538,6 +577,7 @@ function wait(ms) {
 
 async function simulateGame(roundIndex, gameIndex) {
   const game = rounds[roundIndex].games[gameIndex];
+
   if (!game || game.simulated || isSimulating) return;
 
   isSimulating = true;
@@ -549,14 +589,19 @@ async function simulateGame(roundIndex, gameIndex) {
     await wait(450);
   }
 
-  const [score1, score2] = generateScore();
+  game.winner = chooseWinner(game.team1, game.team2);
+
+  const [score1, score2] = generateScore(
+    game.winner === game.team1
+  );
+
   game.score1 = score1;
   game.score2 = score2;
-  game.winner = score1 > score2 ? game.team1 : game.team2;
   game.simulated = true;
   game.running = false;
 
   $("overallStatus").textContent = `${game.winner} wins!`;
+
   isSimulating = false;
 
   renderBracket();
@@ -577,6 +622,7 @@ async function simulateNextRound() {
 
 function checkRoundComplete() {
   const games = rounds[currentRound].games;
+
   if (!games.every(game => game.simulated)) return;
 
   const winners = games.map(game => game.winner);
@@ -589,17 +635,20 @@ function checkRoundComplete() {
   }
 
   const nextGames = [];
+
   for (let i = 0; i < winners.length; i += 2) {
     nextGames.push(makeGame(winners[i], winners[i + 1]));
   }
 
   currentRound++;
+
   rounds.push({
     name: roundName(nextGames.length),
     games: nextGames
   });
 
   $("overallStatus").textContent = `${rounds[currentRound].name} are ready!`;
+
   renderBracket();
 }
 
@@ -642,9 +691,13 @@ function renderBracket() {
 
       const status = document.createElement("div");
       status.className = "game-status";
+
       status.textContent = game.simulated
         ? `${game.winner} advances`
-        : game.running ? "Game in progress..." : "Ready to play";
+        : game.running
+          ? "Game in progress..."
+          : "Ready to play";
+
       card.appendChild(status);
 
       if (!game.simulated) {
@@ -652,7 +705,11 @@ function renderBracket() {
         button.className = "primary game-button";
         button.textContent = "SIMULATE GAME";
         button.disabled = isSimulating || roundIndex !== currentRound;
-        button.addEventListener("click", () => simulateGame(roundIndex, gameIndex));
+
+        button.addEventListener("click", () => {
+          simulateGame(roundIndex, gameIndex);
+        });
+
         card.appendChild(button);
       } else {
         const result = document.createElement("div");
@@ -670,6 +727,7 @@ function renderBracket() {
   });
 
   $("simulateRoundButton").disabled = isSimulating || !!champion;
+
   $("simulateRoundButton").textContent = champion
     ? "TOURNAMENT COMPLETE"
     : "SIMULATE NEXT ROUND";
@@ -678,6 +736,7 @@ function renderBracket() {
 function makeTeamLine(name, score, isWinner, isLoser) {
   const line = document.createElement("div");
   line.className = "team-line";
+
   if (isWinner) line.classList.add("winner");
   if (isLoser) line.classList.add("loser");
 
@@ -689,6 +748,7 @@ function makeTeamLine(name, score, isWinner, isLoser) {
   scoreText.textContent = score;
 
   line.append(teamName, scoreText);
+
   return line;
 }
 
@@ -722,15 +782,18 @@ $("simulateRoundButton").addEventListener("click", simulateNextRound);
 
 $("changeTeamsButton").addEventListener("click", () => {
   selectedTeams = [];
+  teamRatings = {};
   renderTeams();
   showScreen("selectionScreen");
 });
 
 $("newTournamentButton").addEventListener("click", () => {
   selectedTeams = [];
+  teamRatings = {};
   rounds = [];
   champion = null;
   isSimulating = false;
+
   showScreen("setupScreen");
 });
 </script>
