@@ -1187,29 +1187,32 @@ function checkRoundComplete() {
 
 /* BRACKET DISPLAY */
 
+
 function renderBracket() {
-  $("bracketRounds").innerHTML = "";
+  const container = $("bracketRounds");
+  container.innerHTML = "";
+
+  const bracket = document.createElement("div");
+  bracket.className = "bracket-layout";
 
   rounds.forEach((round, roundIndex) => {
-    const section = document.createElement("section");
-    section.className = "round";
+    const column = document.createElement("div");
+    column.className = "bracket-round-column";
 
     const heading = document.createElement("h2");
     heading.textContent = round.name;
+    column.appendChild(heading);
 
-    section.appendChild(heading);
-
-    const grid = document.createElement("div");
-    grid.className = "matchup-grid";
+    const games = document.createElement("div");
+    games.className = "bracket-games";
 
     round.games.forEach((game, gameIndex) => {
       const card = document.createElement("div");
-      card.className = "matchup";
+      card.className = "bracket-game";
 
       const title = document.createElement("div");
       title.className = "matchup-title";
       title.textContent = `GAME ${gameIndex + 1}`;
-
       card.appendChild(title);
 
       card.appendChild(makeTeamLine(
@@ -1225,8 +1228,6 @@ function renderBracket() {
         game.simulated && game.winner === game.team2,
         game.simulated && game.winner !== game.team2
       ));
-
-      /* COUNTDOWN DISPLAY */
 
       if (game.running) {
         const countdownBox = document.createElement("div");
@@ -1281,12 +1282,14 @@ function renderBracket() {
         card.appendChild(result);
       }
 
-      grid.appendChild(card);
+      games.appendChild(card);
     });
 
-    section.appendChild(grid);
-    $("bracketRounds").appendChild(section);
+    column.appendChild(games);
+    bracket.appendChild(column);
   });
+
+  container.appendChild(bracket);
 
   $("simulateRoundButton").disabled =
     isSimulating || !!champion;
@@ -1295,6 +1298,7 @@ function renderBracket() {
     ? "TOURNAMENT COMPLETE"
     : "SIMULATE NEXT ROUND";
 }
+
 
 function makeTeamLine(name, score, isWinner, isLoser) {
   const line = document.createElement("div");
