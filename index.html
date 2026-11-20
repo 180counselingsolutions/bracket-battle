@@ -261,11 +261,22 @@ h2 { margin-top: 0; font-size: 21px; }
 }
 
 .bracket-layout {
+  position: relative;
   display: flex;
   align-items: stretch;
   gap: 55px;
   min-width: max-content;
   padding: 10px 10px 25px;
+}
+
+.bracket-connectors {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .bracket-round-column {
@@ -274,6 +285,7 @@ h2 { margin-top: 0; font-size: 21px; }
   flex-direction: column;
   justify-content: space-around;
   position: relative;
+  z-index: 1;
 }
 
 .bracket-round-column h2 {
@@ -296,6 +308,7 @@ h2 { margin-top: 0; font-size: 21px; }
 
 .bracket-game {
   position: relative;
+  z-index: 1;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -306,21 +319,61 @@ h2 { margin-top: 0; font-size: 21px; }
   justify-content: center;
 }
 
-.bracket-game::after {
-  content: "";
-  position: absolute;
-  right: -56px;
-  top: 50%;
-  width: 55px;
-  height: 2px;
-  background: #71849b;
-}
-
-.bracket-game:last-child::after {
-  display: none;
-}
-
 .bracket-game .matchup-title {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 7px;
+}
+
+.bracket-game .team-line {
+  padding: 7px;
+  margin: 3px 0;
+  font-size: 12px;
+}
+
+.bracket-game .score {
+  font-size: 17px;
+}
+
+.bracket-game .game-status {
+  font-size: 11px;
+  margin: 5px 0;
+}
+
+.bracket-game .game-button {
+  padding: 9px;
+  font-size: 11px;
+}
+
+.bracket-game .countdown-box {
+  padding: 8px;
+}
+
+.bracket-game .countdown-number {
+  font-size: 36px;
+}
+
+.bracket-round-column:last-child .bracket-game {
+  border: 2px solid var(--accent);
+  background: linear-gradient(145deg, #29394b, #1b293b);
+}
+
+.bracket-round-column:last-child h2 {
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .bracket-layout {
+    gap: 45px;
+  }
+
+  .bracket-round-column {
+    width: 220px;
+  }
+}
+
+.matchup-title {
   color: var(--muted);
   font-size: 10px;
   letter-spacing: 1px;
@@ -612,6 +665,7 @@ h2 { margin-top: 0; font-size: 21px; }
 </main>
 
 <script>
+
 const teams = {
   NFL: [
     "Arizona Cardinals","Atlanta Falcons","Baltimore Ravens","Buffalo Bills",
@@ -1187,13 +1241,20 @@ function checkRoundComplete() {
 
 /* BRACKET DISPLAY */
 
-
 function renderBracket() {
   const container = $("bracketRounds");
   container.innerHTML = "";
 
   const bracket = document.createElement("div");
   bracket.className = "bracket-layout";
+
+  const connectors = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "svg"
+  );
+  connectors.classList.add("bracket-connectors");
+  connectors.setAttribute("aria-hidden", "true");
+  bracket.appendChild(connectors);
 
   rounds.forEach((round, roundIndex) => {
     const column = document.createElement("div");
@@ -1291,6 +1352,10 @@ function renderBracket() {
 
   container.appendChild(bracket);
 
+  // Measure the cards after the browser lays them out, then draw
+  // a shared branching connector from each pair into the next game.
+  requestAnimationFrame(() => drawBracketConnectors(bracket));
+
   $("simulateRoundButton").disabled =
     isSimulating || !!champion;
 
@@ -1299,6 +1364,79 @@ function renderBracket() {
     : "SIMULATE NEXT ROUND";
 }
 
+function drawBracketConnectors(bracket) {
+  const svg = bracket.querySelector(".bracket-connectors");
+  const columns = [...bracket.querySelectorAll(".bracket-round-column")];
+
+  if (!svg || columns.length < 2) return;
+
+  const bracketRect = bracket.getBoundingClientRect();
+  const width = bracket.scrollWidth;
+  const height = bracket.scrollHeight;
+
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  svg.setAttribute("width", width);
+  svg.setAttribute("height", height);
+  svg.innerHTML = "";
+
+  const makePath = (d) => {
+    const path = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+
+    path.setAttribute("d", d);
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "#71849b");
+    path.setAttribute("stroke-width", "2");
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
+    svg.appendChild(path);
+  };
+
+  for (let roundIndex = 0; roundIndex < columns.length - 1; roundIndex++) {
+    const sourceCards = [
+      ...columns[roundIndex].querySelectorAll(".bracket-game")
+    ];
+    const targetCards = [
+      ...columns[roundIndex + 1].querySelectorAll(".bracket-game")
+    ];
+
+    targetCards.forEach((targetCard, targetIndex) => {
+      const firstSource = sourceCards[targetIndex * 2];
+      const secondSource = sourceCards[targetIndex * 2 + 1];
+
+      if (!firstSource || !secondSource) return;
+
+      const firstRect = firstSource.getBoundingClientRect();
+      const secondRect = secondSource.getBoundingClientRect();
+      const targetRect = targetCard.getBoundingClientRect();
+
+      const firstY =
+        firstRect.top + firstRect.height / 2 - bracketRect.top;
+      const secondY =
+        secondRect.top + secondRect.height / 2 - bracketRect.top;
+      const targetY =
+        targetRect.top + targetRect.height / 2 - bracketRect.top;
+
+      const firstX = firstRect.right - bracketRect.left;
+      const secondX = secondRect.right - bracketRect.left;
+      const targetX = targetRect.left - bracketRect.left;
+      const spineX = (firstX + targetX) / 2;
+
+      // Each game gets a horizontal line to the shared vertical spine.
+      makePath(`M ${firstX} ${firstY} H ${spineX}`);
+      makePath(`M ${secondX} ${secondY} H ${spineX}`);
+
+      // The spine joins both games and leads into their next-round game.
+      makePath(
+        `M ${spineX} ${Math.min(firstY, secondY)} ` +
+        `V ${Math.max(firstY, secondY)}`
+      );
+      makePath(`M ${spineX} ${targetY} H ${targetX}`);
+    });
+  }
+}
 
 function makeTeamLine(name, score, isWinner, isLoser) {
   const line = document.createElement("div");
@@ -1347,6 +1485,13 @@ function showChampion() {
   $("overallStatus").textContent =
     `${champion} has won the tournament!`;
 }
+
+window.addEventListener("resize", () => {
+  const bracket = document.querySelector(".bracket-layout");
+  if (bracket) {
+    requestAnimationFrame(() => drawBracketConnectors(bracket));
+  }
+});
 
 /* MAIN BUTTONS */
 
