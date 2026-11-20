@@ -457,12 +457,26 @@ h2 { margin-top: 0; font-size: 21px; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
   padding: 10px;
   background: var(--panel-light);
   border-radius: 7px;
   margin: 7px 0;
   font-weight: bold;
+}
+
+.team-line > span:first-child {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.team-line .score {
+  flex: 0 0 30px;
+  min-width: 30px;
+  text-align: right;
 }
 
 .team-line.winner {
