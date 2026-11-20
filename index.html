@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bracket Battle | Sports Simulator</title>
+<title>Bracket Battle</title>
 
 <style>
 :root {
@@ -22,299 +22,262 @@
 
 body {
   margin: 0;
+  padding: 0;
   background: var(--bg);
   color: var(--text);
   font-family: Arial, sans-serif;
 }
 
 header {
-  padding: 22px 7%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 22px 16px;
+  text-align: center;
   border-bottom: 1px solid var(--border);
+  background: #0c1421;
 }
 
 .logo {
   font-size: 25px;
   font-weight: 900;
-  letter-spacing: -1px;
+  letter-spacing: 2px;
 }
 
 .logo span { color: var(--accent); }
 
-.tagline {
-  color: var(--muted);
-  font-size: 13px;
-}
-
 .hero {
   text-align: center;
-  padding: 65px 20px 45px;
-  background: radial-gradient(ellipse at top, #263a54, var(--bg) 70%);
+  padding: 35px 15px 25px;
 }
 
-.hero-label {
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 3px;
+.hero h1 {
+  font-size: clamp(30px, 6vw, 48px);
+  margin: 0 0 10px;
+  font-weight: 900;
 }
 
-h1 {
-  font-size: clamp(38px, 7vw, 62px);
-  margin: 18px 0 12px;
-  letter-spacing: -2px;
-}
-
-h1 span { color: var(--accent); }
+.hero h1 span { color: var(--accent); }
 
 .hero p {
   color: var(--muted);
-  font-size: 16px;
-  max-width: 550px;
-  margin: auto;
-  line-height: 1.6;
+  margin: 0;
 }
 
-main {
-  max-width: 1050px;
-  margin: auto;
-  padding: 20px 20px 70px;
+.container {
+  width: 92%;
+  max-width: 1000px;
+  margin: 0 auto 50px;
 }
 
-.section-heading {
-  margin: 30px 0 18px;
-  font-size: 20px;
-}
-
-.sports {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-
-.sport {
-  background: var(--panel);
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  padding: 22px 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.sport:hover:not(.disabled) {
-  border-color: var(--accent);
-  transform: translateY(-3px);
-}
-
-.sport.selected {
-  border-color: var(--accent);
-  background: #303b48;
-}
-
-.sport.disabled {
-  opacity: .4;
-  cursor: not-allowed;
-}
-
-.sport-icon {
-  font-size: 35px;
-  margin-bottom: 12px;
-}
-
-.sport-name {
-  font-weight: bold;
-  font-size: 15px;
-}
-
-.sport-status {
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 6px;
-}
-
-.options, .selection-panel, .bracket-panel {
+.panel {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 24px;
-  margin-top: 28px;
-}
-
-.sizes {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.size-option {
-  background: var(--panel-light);
-  border: 2px solid var(--border);
-  color: white;
-  padding: 13px 25px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.size-option.selected {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.primary-button {
-  background: var(--accent);
-  color: #17202c;
-  border: none;
-  border-radius: 8px;
-  padding: 16px 25px;
-  font-weight: 900;
-  font-size: 15px;
-  cursor: pointer;
-  margin-top: 25px;
-}
-
-.primary-button:hover { background: #ffc15c; }
-
-.secondary-button {
-  background: var(--panel-light);
-  color: white;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 13px 20px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.secondary-button:hover {
-  border-color: var(--accent);
-}
-
-.hidden { display: none !important; }
-
-.selection-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
-.counter {
-  background: #303b48;
-  border: 1px solid var(--border);
-  padding: 12px 18px;
-  border-radius: 9px;
-  font-weight: bold;
+h2 {
+  margin-top: 0;
+  font-size: 21px;
 }
 
-.counter strong { color: var(--accent); }
+.sport-grid, .size-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.choice {
+  background: var(--panel-light);
+  border: 2px solid var(--border);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 17px 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.choice.active {
+  border-color: var(--accent);
+  background: #3b3428;
+  color: var(--accent);
+}
+
+.choice:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+.primary, .secondary {
+  border: 0;
+  border-radius: 9px;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--accent);
+  color: #17202d;
+}
+
+.primary:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.secondary {
+  background: var(--panel-light);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.full { width: 100%; margin-top: 20px; }
+
+.hidden { display: none !important; }
+
+.counter {
+  color: var(--accent);
+  font-weight: bold;
+  margin: 12px 0;
+}
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 9px;
+  margin-top: 18px;
 }
 
 .team {
   background: var(--panel-light);
   border: 2px solid var(--border);
-  border-radius: 9px;
-  color: white;
-  padding: 14px 10px;
+  color: var(--text);
+  padding: 13px;
+  border-radius: 8px;
   text-align: left;
-  font-size: 13px;
-  font-weight: bold;
   cursor: pointer;
-  min-height: 52px;
-  transition: .15s;
+  font-size: 14px;
 }
-
-.team:hover { border-color: var(--accent); }
 
 .team.selected {
   border-color: var(--green);
-  background: #203d3b;
+  background: #203b39;
 }
 
-.team:disabled {
-  opacity: .35;
-  cursor: not-allowed;
+.team:disabled { opacity: .35; cursor: not-allowed; }
+
+.top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.team-check {
-  color: var(--green);
-  margin-right: 6px;
+.round {
+  margin: 25px 0;
 }
 
-.message {
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 15px;
-  line-height: 1.5;
+.round h2 {
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
 }
 
-.bracket-title {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.bracket-title h2 {
-  font-size: 28px;
-  margin-bottom: 8px;
-}
-
-.bracket-title p { color: var(--muted); }
-
-.matchups {
+.matchup-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
 }
 
 .matchup {
-  background: var(--panel-light);
+  background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 17px;
+  border-radius: 12px;
+  padding: 16px;
 }
 
-.matchup-label {
-  color: var(--accent);
-  font-size: 11px;
+.matchup-title {
+  color: var(--muted);
+  font-size: 12px;
   font-weight: bold;
   letter-spacing: 1px;
   margin-bottom: 12px;
 }
 
-.matchup-team {
-  padding: 11px;
-  background: #1b293b;
-  border-radius: 6px;
-  margin-top: 6px;
+.team-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--panel-light);
+  border-radius: 7px;
+  margin: 7px 0;
   font-weight: bold;
-  font-size: 14px;
 }
 
-footer {
-  border-top: 1px solid var(--border);
-  text-align: center;
-  padding: 25px;
+.team-line.winner {
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+
+.team-line.loser { opacity: .55; }
+
+.score {
+  font-size: 21px;
+  font-weight: 900;
+  min-width: 25px;
+  text-align: right;
+}
+
+.game-status {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
+  text-align: center;
+  min-height: 20px;
+  margin: 10px 0;
 }
 
-@media(max-width:600px) {
-  header { padding: 18px; }
-  .tagline { display: none; }
-  .sports { grid-template-columns: repeat(2, 1fr); }
-  .team-grid { grid-template-columns: repeat(2, 1fr); }
-  .matchups { grid-template-columns: 1fr; }
-  .hero { padding: 50px 18px 35px; }
-  .selection-panel, .bracket-panel { padding: 17px; }
+.game-button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.champion {
+  text-align: center;
+  padding: 35px 20px;
+  border: 2px solid var(--accent);
+  background: linear-gradient(145deg, #29394b, #1b293b);
+  border-radius: 16px;
+  margin: 25px 0;
+}
+
+.trophy { font-size: 58px; }
+
+.champion h2 {
+  color: var(--accent);
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+.champion-name {
+  font-size: clamp(25px, 5vw, 38px);
+  font-weight: 900;
+  margin: 15px 0;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .sport-grid, .size-grid { grid-template-columns: repeat(2, 1fr); }
+  .panel { padding: 17px; }
+  .top-actions button { flex: 1; }
 }
 </style>
 </head>
@@ -323,437 +286,453 @@ footer {
 
 <header>
   <div class="logo">BRACKET<span>BATTLE</span></div>
-  <div class="tagline">PICK YOUR TEAMS. PLAY IT OUT.</div>
 </header>
 
-<section class="hero">
-  <div class="hero-label">YOUR TOURNAMENT STARTS HERE</div>
+<div class="hero">
   <h1>WHO WILL BE <span>CHAMPION?</span></h1>
-  <p>
-    Pick your sport. Choose your teams.
-    Simulate the matchups and see who takes home the trophy.
-  </p>
-</section>
+  <p>Pick your teams. Build your bracket. Let the games begin.</p>
+</div>
 
-<main>
+<main class="container">
 
-<section id="setupScreen">
-
-  <h2 class="section-heading">01 / Choose Your Sport</h2>
-
-  <div class="sports" id="sportsGrid">
-
-    <div class="sport selected" data-sport="NFL" onclick="selectSport(this)">
-      <div class="sport-icon">🏈</div>
-      <div class="sport-name">NFL</div>
-      <div class="sport-status">Football</div>
+  <section id="setupScreen" class="panel">
+    <h2>1. Choose Your Sport</h2>
+    <div class="sport-grid" id="sportChoices">
+      <button class="choice active" data-sport="NFL">🏈 NFL</button>
+      <button class="choice" data-sport="NBA">🏀 NBA</button>
+      <button class="choice" data-sport="MLB">⚾ MLB</button>
+      <button class="choice" data-sport="NHL">🏒 NHL</button>
     </div>
 
-    <div class="sport" data-sport="NBA" onclick="selectSport(this)">
-      <div class="sport-icon">🏀</div>
-      <div class="sport-name">NBA</div>
-      <div class="sport-status">Basketball</div>
+    <h2 style="margin-top:28px;">2. Choose Tournament Size</h2>
+    <div class="size-grid" id="sizeChoices">
+      <button class="choice" data-size="4">4 TEAMS</button>
+      <button class="choice active" data-size="8">8 TEAMS</button>
+      <button class="choice" data-size="16">16 TEAMS</button>
     </div>
 
-    <div class="sport" data-sport="MLB" onclick="selectSport(this)">
-      <div class="sport-icon">⚾</div>
-      <div class="sport-name">MLB</div>
-      <div class="sport-status">Baseball</div>
-    </div>
+    <button class="primary full" id="continueButton">CHOOSE YOUR TEAMS →</button>
+  </section>
 
-    <div class="sport" data-sport="NHL" onclick="selectSport(this)">
-      <div class="sport-icon">🏒</div>
-      <div class="sport-name">NHL</div>
-      <div class="sport-status">Hockey</div>
-    </div>
+  <section id="selectionScreen" class="panel hidden">
+    <h2>Choose Your Teams</h2>
+    <p class="note">Select the teams you want competing in your tournament.</p>
+    <div class="counter" id="counter">0 of 8 teams selected</div>
+    <div class="team-grid" id="teamGrid"></div>
+    <button class="primary full" id="buildButton" disabled>BUILD MY BRACKET →</button>
+    <button class="secondary full" id="backToSetup">← BACK</button>
+  </section>
 
-    <div class="sport disabled">
-      <div class="sport-icon">⚽</div>
-      <div class="sport-name">Soccer</div>
-      <div class="sport-status">Coming Soon</div>
-    </div>
-
-    <div class="sport disabled">
-      <div class="sport-icon">🏆</div>
-      <div class="sport-name">College</div>
-      <div class="sport-status">Coming Soon</div>
-    </div>
-
-  </div>
-
-  <div class="options">
-    <h2 class="section-heading">02 / Tournament Size</h2>
-    <p style="color:var(--muted); margin-bottom:18px;">
-      How many teams will compete?
-    </p>
-
-    <div class="sizes">
-      <button class="size-option selected" onclick="selectSize(this,4)">4 Teams</button>
-      <button class="size-option" onclick="selectSize(this,8)">8 Teams</button>
-      <button class="size-option" onclick="selectSize(this,16)">16 Teams</button>
-    </div>
-
-    <button class="primary-button" onclick="startTournament()">
-      SELECT YOUR TEAMS →
-    </button>
-  </div>
-
-</section>
-
-<section id="selectionScreen" class="selection-panel hidden">
-
-  <div class="selection-top">
-    <div>
-      <h2 style="margin:0 0 7px;">03 / Select Your Teams</h2>
-      <div style="color:var(--muted);font-size:13px;" id="selectionSubtitle">
-        Choose your tournament participants.
+  <section id="bracketScreen" class="hidden">
+    <div class="panel">
+      <h2 id="tournamentHeading">YOUR TOURNAMENT</h2>
+      <p class="note" id="tournamentDescription">The road to the championship starts here.</p>
+      <div class="top-actions">
+        <button class="primary" id="simulateRoundButton">SIMULATE NEXT ROUND</button>
+        <button class="secondary" id="changeTeamsButton">CHANGE TEAMS</button>
       </div>
+      <div class="game-status" id="overallStatus"></div>
     </div>
 
-    <div class="counter">
-      SELECTED: <strong id="selectedCount">0</strong>
-      / <span id="requiredCount">4</span>
-    </div>
-  </div>
+    <div id="bracketRounds"></div>
+    <div id="championArea"></div>
 
-  <div class="team-grid" id="teamGrid"></div>
-
-  <div class="message" id="selectionMessage">
-    Select your teams to fill your tournament.
-  </div>
-
-  <button class="primary-button" id="buildButton" onclick="buildBracket()" disabled>
-    BUILD MY BRACKET →
-  </button>
-
-  <br><br>
-  <button class="secondary-button" onclick="goBack()">← Back to Setup</button>
-
-</section>
-
-<section id="bracketScreen" class="bracket-panel hidden">
-
-  <div class="bracket-title">
-    <div class="hero-label">TOURNAMENT READY</div>
-    <h2 id="bracketHeading">YOUR TOURNAMENT</h2>
-    <p id="bracketSubtitle">First-round matchups</p>
-  </div>
-
-  <div class="matchups" id="matchups"></div>
-
-  <div style="text-align:center;margin-top:25px;">
-    <button class="secondary-button" onclick="goBack()">← Change Teams</button>
-  </div>
-
-</section>
+    <button class="secondary full" id="newTournamentButton">START A NEW TOURNAMENT</button>
+  </section>
 
 </main>
 
-<footer>
-  BRACKET BATTLE · PICK YOUR TEAMS. PLAY IT OUT.
-</footer>
-
 <script>
-
 const teams = {
-
-NFL: [
-"Arizona Cardinals",
-"Atlanta Falcons",
-"Baltimore Ravens",
-"Buffalo Bills",
-"Carolina Panthers",
-"Chicago Bears",
-"Cincinnati Bengals",
-"Cleveland Browns",
-"Dallas Cowboys",
-"Denver Broncos",
-"Detroit Lions",
-"Green Bay Packers",
-"Houston Texans",
-"Indianapolis Colts",
-"Jacksonville Jaguars",
-"Kansas City Chiefs",
-"Las Vegas Raiders",
-"Los Angeles Chargers",
-"Los Angeles Rams",
-"Miami Dolphins",
-"Minnesota Vikings",
-"New England Patriots",
-"New Orleans Saints",
-"New York Giants",
-"New York Jets",
-"Philadelphia Eagles",
-"Pittsburgh Steelers",
-"San Francisco 49ers",
-"Seattle Seahawks",
-"Tampa Bay Buccaneers",
-"Tennessee Titans",
-"Washington Commanders"
-],
-
-NBA: [
-"Atlanta Hawks",
-"Boston Celtics",
-"Brooklyn Nets",
-"Charlotte Hornets",
-"Chicago Bulls",
-"Cleveland Cavaliers",
-"Dallas Mavericks",
-"Denver Nuggets",
-"Detroit Pistons",
-"Golden State Warriors",
-"Houston Rockets",
-"Indiana Pacers",
-"LA Clippers",
-"Los Angeles Lakers",
-"Memphis Grizzlies",
-"Miami Heat",
-"Milwaukee Bucks",
-"Minnesota Timberwolves",
-"New Orleans Pelicans",
-"New York Knicks",
-"Oklahoma City Thunder",
-"Orlando Magic",
-"Philadelphia 76ers",
-"Phoenix Suns",
-"Portland Trail Blazers",
-"Sacramento Kings",
-"San Antonio Spurs",
-"Toronto Raptors",
-"Utah Jazz",
-"Washington Wizards"
-],
-
-MLB: [
-"Arizona Diamondbacks",
-"Atlanta Braves",
-"Baltimore Orioles",
-"Boston Red Sox",
-"Chicago Cubs",
-"Chicago White Sox",
-"Cincinnati Reds",
-"Cleveland Guardians",
-"Colorado Rockies",
-"Detroit Tigers",
-"Houston Astros",
-"Kansas City Royals",
-"Los Angeles Angels",
-"Los Angeles Dodgers",
-"Miami Marlins",
-"Milwaukee Brewers",
-"Minnesota Twins",
-"New York Mets",
-"New York Yankees",
-"Oakland Athletics",
-"Philadelphia Phillies",
-"Pittsburgh Pirates",
-"San Diego Padres",
-"San Francisco Giants",
-"Seattle Mariners",
-"St. Louis Cardinals",
-"Tampa Bay Rays",
-"Texas Rangers",
-"Toronto Blue Jays",
-"Washington Nationals"
-],
-
-NHL: [
-"Anaheim Ducks",
-"Boston Bruins",
-"Buffalo Sabres",
-"Calgary Flames",
-"Carolina Hurricanes",
-"Chicago Blackhawks",
-"Colorado Avalanche",
-"Columbus Blue Jackets",
-"Dallas Stars",
-"Detroit Red Wings",
-"Edmonton Oilers",
-"Florida Panthers",
-"Los Angeles Kings",
-"Minnesota Wild",
-"Montreal Canadiens",
-"Nashville Predators",
-"New Jersey Devils",
-"New York Islanders",
-"New York Rangers",
-"Ottawa Senators",
-"Philadelphia Flyers",
-"Pittsburgh Penguins",
-"San Jose Sharks",
-"Seattle Kraken",
-"St. Louis Blues",
-"Tampa Bay Lightning",
-"Toronto Maple Leafs",
-"Utah Mammoth",
-"Vancouver Canucks",
-"Vegas Golden Knights",
-"Washington Capitals",
-"Winnipeg Jets"
-]
-
+  NFL: [
+    "Arizona Cardinals","Atlanta Falcons","Baltimore Ravens","Buffalo Bills",
+    "Carolina Panthers","Chicago Bears","Cincinnati Bengals","Cleveland Browns",
+    "Dallas Cowboys","Denver Broncos","Detroit Lions","Green Bay Packers",
+    "Houston Texans","Indianapolis Colts","Jacksonville Jaguars","Kansas City Chiefs",
+    "Las Vegas Raiders","Los Angeles Chargers","Los Angeles Rams","Miami Dolphins",
+    "Minnesota Vikings","New England Patriots","New Orleans Saints","New York Giants",
+    "New York Jets","Philadelphia Eagles","Pittsburgh Steelers","San Francisco 49ers",
+    "Seattle Seahawks","Tampa Bay Buccaneers","Tennessee Titans","Washington Commanders"
+  ],
+  NBA: [
+    "Atlanta Hawks","Boston Celtics","Brooklyn Nets","Charlotte Hornets",
+    "Chicago Bulls","Cleveland Cavaliers","Dallas Mavericks","Denver Nuggets",
+    "Detroit Pistons","Golden State Warriors","Houston Rockets","Indiana Pacers",
+    "LA Clippers","Los Angeles Lakers","Memphis Grizzlies","Miami Heat",
+    "Milwaukee Bucks","Minnesota Timberwolves","New Orleans Pelicans","New York Knicks",
+    "Oklahoma City Thunder","Orlando Magic","Philadelphia 76ers","Phoenix Suns",
+    "Portland Trail Blazers","Sacramento Kings","San Antonio Spurs","Toronto Raptors",
+    "Utah Jazz","Washington Wizards"
+  ],
+  MLB: [
+    "Arizona Diamondbacks","Athletics","Atlanta Braves","Baltimore Orioles",
+    "Boston Red Sox","Chicago Cubs","Chicago White Sox","Cincinnati Reds",
+    "Cleveland Guardians","Colorado Rockies","Detroit Tigers","Houston Astros",
+    "Kansas City Royals","Los Angeles Angels","Los Angeles Dodgers","Miami Marlins",
+    "Milwaukee Brewers","Minnesota Twins","New York Mets","New York Yankees",
+    "Philadelphia Phillies","Pittsburgh Pirates","San Diego Padres","San Francisco Giants",
+    "Seattle Mariners","St. Louis Cardinals","Tampa Bay Rays","Texas Rangers",
+    "Toronto Blue Jays","Washington Nationals"
+  ],
+  NHL: [
+    "Anaheim Ducks","Boston Bruins","Buffalo Sabres","Calgary Flames",
+    "Carolina Hurricanes","Chicago Blackhawks","Colorado Avalanche","Columbus Blue Jackets",
+    "Dallas Stars","Detroit Red Wings","Edmonton Oilers","Florida Panthers",
+    "Los Angeles Kings","Minnesota Wild","Montreal Canadiens","Nashville Predators",
+    "New Jersey Devils","New York Islanders","New York Rangers","Ottawa Senators",
+    "Philadelphia Flyers","Pittsburgh Penguins","San Jose Sharks","Seattle Kraken",
+    "St. Louis Blues","Tampa Bay Lightning","Toronto Maple Leafs","Utah Mammoth",
+    "Vancouver Canucks","Vegas Golden Knights","Washington Capitals","Winnipeg Jets"
+  ]
 };
 
 let selectedSport = "NFL";
-let tournamentSize = 4;
+let tournamentSize = 8;
 let selectedTeams = [];
+let rounds = [];
+let currentRound = 0;
+let isSimulating = false;
+let champion = null;
 
-function selectSport(element) {
-  document.querySelectorAll(".sport").forEach(sport => {
-    sport.classList.remove("selected");
+const $ = id => document.getElementById(id);
+
+function showScreen(screen) {
+  ["setupScreen", "selectionScreen", "bracketScreen"].forEach(id => {
+    $(id).classList.toggle("hidden", id !== screen);
   });
-
-  element.classList.add("selected");
-  selectedSport = element.dataset.sport;
 }
 
-function selectSize(element, size) {
-  document.querySelectorAll(".size-option").forEach(button => {
-    button.classList.remove("selected");
+document.querySelectorAll("[data-sport]").forEach(button => {
+  button.addEventListener("click", () => {
+    selectedSport = button.dataset.sport;
+    document.querySelectorAll("[data-sport]").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
   });
+});
 
-  element.classList.add("selected");
-  tournamentSize = size;
-}
+document.querySelectorAll("[data-size]").forEach(button => {
+  button.addEventListener("click", () => {
+    tournamentSize = Number(button.dataset.size);
+    document.querySelectorAll("[data-size]").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+  });
+});
 
-function startTournament() {
+$("continueButton").addEventListener("click", () => {
   selectedTeams = [];
-
-  document.getElementById("setupScreen").classList.add("hidden");
-  document.getElementById("bracketScreen").classList.add("hidden");
-  document.getElementById("selectionScreen").classList.remove("hidden");
-
-  document.getElementById("selectionSubtitle").textContent =
-    "Choose " + tournamentSize + " teams for your " + selectedSport + " tournament.";
-
-  document.getElementById("requiredCount").textContent = tournamentSize;
-
   renderTeams();
-  updateCounter();
-
-  window.scrollTo(0,0);
-}
+  showScreen("selectionScreen");
+});
 
 function renderTeams() {
-  const grid = document.getElementById("teamGrid");
-  grid.innerHTML = "";
-
+  $("teamGrid").innerHTML = "";
   teams[selectedSport].forEach(team => {
     const button = document.createElement("button");
     button.className = "team";
     button.textContent = team;
-
     button.addEventListener("click", () => toggleTeam(team));
-
-    grid.appendChild(button);
+    $("teamGrid").appendChild(button);
   });
+  updateSelection();
 }
 
 function toggleTeam(team) {
-
   if (selectedTeams.includes(team)) {
-    selectedTeams = selectedTeams.filter(item => item !== team);
-  } else {
-    if (selectedTeams.length >= tournamentSize) return;
+    selectedTeams = selectedTeams.filter(t => t !== team);
+  } else if (selectedTeams.length < tournamentSize) {
     selectedTeams.push(team);
   }
-
-  renderSelectedTeams();
-  updateCounter();
+  updateSelection();
 }
 
-function renderSelectedTeams() {
-  const buttons = document.querySelectorAll(".team");
+function updateSelection() {
+  $("counter").textContent = `${selectedTeams.length} of ${tournamentSize} teams selected`;
+  $("buildButton").disabled = selectedTeams.length !== tournamentSize;
 
-  buttons.forEach(button => {
-    const team = button.textContent;
-    const selected = selectedTeams.includes(team);
-
+  [...$("teamGrid").children].forEach(button => {
+    const selected = selectedTeams.includes(button.textContent);
     button.classList.toggle("selected", selected);
-
-    button.innerHTML = selected
-      ? '<span class="team-check">✓</span>' + team
-      : team;
-
-    button.disabled =
-      !selected && selectedTeams.length >= tournamentSize;
+    button.disabled = !selected && selectedTeams.length >= tournamentSize;
+    button.textContent = (selected ? "✓  " : "") +
+      button.textContent.replace(/^✓  /, "");
   });
 }
 
-function updateCounter() {
-  document.getElementById("selectedCount").textContent =
-    selectedTeams.length;
+$("backToSetup").addEventListener("click", () => showScreen("setupScreen"));
 
-  const buildButton = document.getElementById("buildButton");
-
-  buildButton.disabled = selectedTeams.length !== tournamentSize;
-
-  const message = document.getElementById("selectionMessage");
-
-  if (selectedTeams.length === tournamentSize) {
-    message.textContent = "Perfect! Your teams are ready. Let's build the bracket!";
-    message.style.color = "var(--green)";
-  } else {
-    message.textContent =
-      "Choose " + (tournamentSize - selectedTeams.length) +
-      " more team(s) to complete your tournament.";
-    message.style.color = "var(--muted)";
+function shuffle(items) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
   }
+  return result;
 }
 
-function buildBracket() {
+function roundName(gameCount) {
+  if (gameCount === 8) return "ROUND OF 16";
+  if (gameCount === 4) return "QUARTERFINALS";
+  if (gameCount === 2) return "SEMIFINALS";
+  return "CHAMPIONSHIP";
+}
 
-  if (selectedTeams.length !== tournamentSize) return;
-
-  const shuffled = [...selectedTeams];
-
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-
-  const matchups = document.getElementById("matchups");
-  matchups.innerHTML = "";
+$("buildButton").addEventListener("click", () => {
+  const shuffled = shuffle(selectedTeams);
+  const games = [];
 
   for (let i = 0; i < shuffled.length; i += 2) {
-    const game = document.createElement("div");
-    game.className = "matchup";
-
-    const number = (i / 2) + 1;
-
-    game.innerHTML = `
-      <div class="matchup-label">QUARTERFINAL ${number}</div>
-      <div class="matchup-team"></div>
-      <div class="matchup-team"></div>
-    `;
-
-    game.children[1].textContent = shuffled[i];
-    game.children[2].textContent = shuffled[i + 1];
-
-    matchups.appendChild(game);
+    games.push(makeGame(shuffled[i], shuffled[i + 1]));
   }
 
-  document.getElementById("bracketHeading").textContent =
-    selectedSport + " CHAMPIONSHIP";
+  rounds = [{ name: roundName(games.length), games }];
+  currentRound = 0;
+  champion = null;
+  $("championArea").innerHTML = "";
+  $("tournamentHeading").textContent = `${selectedSport} TOURNAMENT`;
+  $("tournamentDescription").textContent =
+    `${tournamentSize} teams. One champion. Let's find out who wins.`;
+  $("overallStatus").textContent = "Your matchups are ready. Let the games begin!";
+  showScreen("bracketScreen");
+  renderBracket();
+});
 
-  document.getElementById("bracketSubtitle").textContent =
-    tournamentSize + "-team tournament · First-round matchups";
-
-  document.getElementById("selectionScreen").classList.add("hidden");
-  document.getElementById("bracketScreen").classList.remove("hidden");
-
-  window.scrollTo(0,0);
+function makeGame(team1, team2) {
+  return {
+    team1, team2,
+    score1: null,
+    score2: null,
+    winner: null,
+    simulated: false,
+    running: false
+  };
 }
 
-function goBack() {
-  document.getElementById("selectionScreen").classList.add("hidden");
-  document.getElementById("bracketScreen").classList.add("hidden");
-  document.getElementById("setupScreen").classList.remove("hidden");
-
-  window.scrollTo(0,0);
+function scoreForSport() {
+  if (selectedSport === "NFL") {
+    return Math.floor(Math.random() * 8) * 3 +
+      Math.floor(Math.random() * 5) * 7;
+  }
+  if (selectedSport === "NBA") return 85 + Math.floor(Math.random() * 46);
+  if (selectedSport === "MLB") return Math.floor(Math.random() * 11);
+  return Math.floor(Math.random() * 8);
 }
 
+function generateScore() {
+  let a = scoreForSport();
+  let b = scoreForSport();
+
+  if (a === b) {
+    if (selectedSport === "NFL") {
+      a += Math.random() < 0.5 ? 3 : 7;
+    } else {
+      a += 1;
+    }
+  }
+
+  return [a, b];
+}
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function simulateGame(roundIndex, gameIndex) {
+  const game = rounds[roundIndex].games[gameIndex];
+  if (!game || game.simulated || isSimulating) return;
+
+  isSimulating = true;
+  game.running = true;
+  renderBracket();
+
+  for (let count = 3; count >= 1; count--) {
+    $("overallStatus").textContent = `Game starting in ${count}...`;
+    await wait(450);
+  }
+
+  const [score1, score2] = generateScore();
+  game.score1 = score1;
+  game.score2 = score2;
+  game.winner = score1 > score2 ? game.team1 : game.team2;
+  game.simulated = true;
+  game.running = false;
+
+  $("overallStatus").textContent = `${game.winner} wins!`;
+  isSimulating = false;
+
+  renderBracket();
+  checkRoundComplete();
+}
+
+async function simulateNextRound() {
+  if (isSimulating || champion) return;
+
+  const games = rounds[currentRound].games;
+
+  for (let i = 0; i < games.length; i++) {
+    if (!games[i].simulated) {
+      await simulateGame(currentRound, i);
+    }
+  }
+}
+
+function checkRoundComplete() {
+  const games = rounds[currentRound].games;
+  if (!games.every(game => game.simulated)) return;
+
+  const winners = games.map(game => game.winner);
+
+  if (winners.length === 1) {
+    champion = winners[0];
+    showChampion();
+    renderBracket();
+    return;
+  }
+
+  const nextGames = [];
+  for (let i = 0; i < winners.length; i += 2) {
+    nextGames.push(makeGame(winners[i], winners[i + 1]));
+  }
+
+  currentRound++;
+  rounds.push({
+    name: roundName(nextGames.length),
+    games: nextGames
+  });
+
+  $("overallStatus").textContent = `${rounds[currentRound].name} are ready!`;
+  renderBracket();
+}
+
+function renderBracket() {
+  $("bracketRounds").innerHTML = "";
+
+  rounds.forEach((round, roundIndex) => {
+    const section = document.createElement("section");
+    section.className = "round";
+
+    const heading = document.createElement("h2");
+    heading.textContent = round.name;
+    section.appendChild(heading);
+
+    const grid = document.createElement("div");
+    grid.className = "matchup-grid";
+
+    round.games.forEach((game, gameIndex) => {
+      const card = document.createElement("div");
+      card.className = "matchup";
+
+      const title = document.createElement("div");
+      title.className = "matchup-title";
+      title.textContent = `GAME ${gameIndex + 1}`;
+      card.appendChild(title);
+
+      card.appendChild(makeTeamLine(
+        game.team1,
+        game.simulated ? game.score1 : "",
+        game.simulated && game.winner === game.team1,
+        game.simulated && game.winner !== game.team1
+      ));
+
+      card.appendChild(makeTeamLine(
+        game.team2,
+        game.simulated ? game.score2 : "",
+        game.simulated && game.winner === game.team2,
+        game.simulated && game.winner !== game.team2
+      ));
+
+      const status = document.createElement("div");
+      status.className = "game-status";
+      status.textContent = game.simulated
+        ? `${game.winner} advances`
+        : game.running ? "Game in progress..." : "Ready to play";
+      card.appendChild(status);
+
+      if (!game.simulated) {
+        const button = document.createElement("button");
+        button.className = "primary game-button";
+        button.textContent = "SIMULATE GAME";
+        button.disabled = isSimulating || roundIndex !== currentRound;
+        button.addEventListener("click", () => simulateGame(roundIndex, gameIndex));
+        card.appendChild(button);
+      } else {
+        const result = document.createElement("div");
+        result.className = "game-status";
+        result.style.color = "var(--green)";
+        result.textContent = "✓ FINAL";
+        card.appendChild(result);
+      }
+
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    $("bracketRounds").appendChild(section);
+  });
+
+  $("simulateRoundButton").disabled = isSimulating || !!champion;
+  $("simulateRoundButton").textContent = champion
+    ? "TOURNAMENT COMPLETE"
+    : "SIMULATE NEXT ROUND";
+}
+
+function makeTeamLine(name, score, isWinner, isLoser) {
+  const line = document.createElement("div");
+  line.className = "team-line";
+  if (isWinner) line.classList.add("winner");
+  if (isLoser) line.classList.add("loser");
+
+  const teamName = document.createElement("span");
+  teamName.textContent = name;
+
+  const scoreText = document.createElement("span");
+  scoreText.className = "score";
+  scoreText.textContent = score;
+
+  line.append(teamName, scoreText);
+  return line;
+}
+
+function showChampion() {
+  $("championArea").innerHTML = "";
+
+  const box = document.createElement("div");
+  box.className = "champion";
+
+  const trophy = document.createElement("div");
+  trophy.className = "trophy";
+  trophy.textContent = "🏆";
+
+  const heading = document.createElement("h2");
+  heading.textContent = "YOUR CHAMPION";
+
+  const name = document.createElement("div");
+  name.className = "champion-name";
+  name.textContent = champion;
+
+  const subtitle = document.createElement("p");
+  subtitle.textContent = `${selectedSport} TOURNAMENT WINNER`;
+
+  box.append(trophy, heading, name, subtitle);
+  $("championArea").appendChild(box);
+
+  $("overallStatus").textContent = `${champion} has won the tournament!`;
+}
+
+$("simulateRoundButton").addEventListener("click", simulateNextRound);
+
+$("changeTeamsButton").addEventListener("click", () => {
+  selectedTeams = [];
+  renderTeams();
+  showScreen("selectionScreen");
+});
+
+$("newTournamentButton").addEventListener("click", () => {
+  selectedTeams = [];
+  rounds = [];
+  champion = null;
+  isSimulating = false;
+  showScreen("setupScreen");
+});
 </script>
 
 </body>
