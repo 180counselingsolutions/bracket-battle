@@ -1222,7 +1222,9 @@ function recordNFLPlayerStats(team, boxScore) {
 }
 
 function getTournamentMVP() {
-  const players = Object.values(tournamentPlayerStats);
+  const players = Object.values(tournamentPlayerStats).filter(
+  player => player.team === champion
+);
 
   if (players.length === 0) return null;
 
