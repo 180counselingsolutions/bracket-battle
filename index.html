@@ -15,11 +15,10 @@
   --text: #f8fafc;
   --muted: #aab6c5;
   --border: #34445a;
+  --green: #39c98a;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -42,9 +41,7 @@ header {
   letter-spacing: -1px;
 }
 
-.logo span {
-  color: var(--accent);
-}
+.logo span { color: var(--accent); }
 
 .tagline {
   color: var(--muted);
@@ -53,7 +50,7 @@ header {
 
 .hero {
   text-align: center;
-  padding: 75px 20px 55px;
+  padding: 65px 20px 45px;
   background: radial-gradient(ellipse at top, #263a54, var(--bg) 70%);
 }
 
@@ -65,20 +62,18 @@ header {
 }
 
 h1 {
-  font-size: clamp(38px, 7vw, 66px);
+  font-size: clamp(38px, 7vw, 62px);
   margin: 18px 0 12px;
   letter-spacing: -2px;
 }
 
-h1 span {
-  color: var(--accent);
-}
+h1 span { color: var(--accent); }
 
 .hero p {
   color: var(--muted);
-  font-size: 17px;
+  font-size: 16px;
   max-width: 550px;
-  margin: 0 auto;
+  margin: auto;
   line-height: 1.6;
 }
 
@@ -89,7 +84,7 @@ main {
 }
 
 .section-heading {
-  margin: 35px 0 18px;
+  margin: 30px 0 18px;
   font-size: 20px;
 }
 
@@ -103,13 +98,13 @@ main {
   background: var(--panel);
   border: 2px solid var(--border);
   border-radius: 12px;
-  padding: 23px 12px;
+  padding: 22px 12px;
   text-align: center;
   cursor: pointer;
   transition: .2s;
 }
 
-.sport:hover {
+.sport:hover:not(.disabled) {
   border-color: var(--accent);
   transform: translateY(-3px);
 }
@@ -117,6 +112,11 @@ main {
 .sport.selected {
   border-color: var(--accent);
   background: #303b48;
+}
+
+.sport.disabled {
+  opacity: .4;
+  cursor: not-allowed;
 }
 
 .sport-icon {
@@ -135,7 +135,7 @@ main {
   margin-top: 6px;
 }
 
-.options {
+.options, .selection-panel, .bracket-panel {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -169,15 +169,134 @@ main {
   color: #17202c;
   border: none;
   border-radius: 8px;
-  padding: 16px 30px;
+  padding: 16px 25px;
   font-weight: 900;
   font-size: 15px;
   cursor: pointer;
   margin-top: 25px;
 }
 
-.primary-button:hover {
-  background: #ffc15c;
+.primary-button:hover { background: #ffc15c; }
+
+.secondary-button {
+  background: var(--panel-light);
+  color: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 13px 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  border-color: var(--accent);
+}
+
+.hidden { display: none !important; }
+
+.selection-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.counter {
+  background: #303b48;
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  border-radius: 9px;
+  font-weight: bold;
+}
+
+.counter strong { color: var(--accent); }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.team {
+  background: var(--panel-light);
+  border: 2px solid var(--border);
+  border-radius: 9px;
+  color: white;
+  padding: 14px 10px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  min-height: 52px;
+  transition: .15s;
+}
+
+.team:hover { border-color: var(--accent); }
+
+.team.selected {
+  border-color: var(--green);
+  background: #203d3b;
+}
+
+.team:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+.team-check {
+  color: var(--green);
+  margin-right: 6px;
+}
+
+.message {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 15px;
+  line-height: 1.5;
+}
+
+.bracket-title {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.bracket-title h2 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.bracket-title p { color: var(--muted); }
+
+.matchups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.matchup {
+  background: var(--panel-light);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 17px;
+}
+
+.matchup-label {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.matchup-team {
+  padding: 11px;
+  background: #1b293b;
+  border-radius: 6px;
+  margin-top: 6px;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 footer {
@@ -189,21 +308,13 @@ footer {
 }
 
 @media(max-width:600px) {
-  header {
-    padding: 18px;
-  }
-
-  .tagline {
-    display: none;
-  }
-
-  .sports {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .hero {
-    padding: 55px 18px 35px;
-  }
+  header { padding: 18px; }
+  .tagline { display: none; }
+  .sports { grid-template-columns: repeat(2, 1fr); }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .matchups { grid-template-columns: 1fr; }
+  .hero { padding: 50px 18px 35px; }
+  .selection-panel, .bracket-panel { padding: 17px; }
 }
 </style>
 </head>
@@ -226,44 +337,48 @@ footer {
 
 <main>
 
+<section id="setupScreen">
+
   <h2 class="section-heading">01 / Choose Your Sport</h2>
 
-  <div class="sports">
-    <div class="sport selected" onclick="selectSport(this)">
+  <div class="sports" id="sportsGrid">
+
+    <div class="sport selected" data-sport="NFL" onclick="selectSport(this)">
       <div class="sport-icon">🏈</div>
       <div class="sport-name">NFL</div>
       <div class="sport-status">Football</div>
     </div>
 
-    <div class="sport" onclick="selectSport(this)">
+    <div class="sport" data-sport="NBA" onclick="selectSport(this)">
       <div class="sport-icon">🏀</div>
       <div class="sport-name">NBA</div>
       <div class="sport-status">Basketball</div>
     </div>
 
-    <div class="sport" onclick="selectSport(this)">
+    <div class="sport" data-sport="MLB" onclick="selectSport(this)">
       <div class="sport-icon">⚾</div>
       <div class="sport-name">MLB</div>
       <div class="sport-status">Baseball</div>
     </div>
 
-    <div class="sport" onclick="selectSport(this)">
+    <div class="sport" data-sport="NHL" onclick="selectSport(this)">
       <div class="sport-icon">🏒</div>
       <div class="sport-name">NHL</div>
       <div class="sport-status">Hockey</div>
     </div>
 
-    <div class="sport" onclick="selectSport(this)">
+    <div class="sport disabled">
       <div class="sport-icon">⚽</div>
       <div class="sport-name">Soccer</div>
-      <div class="sport-status">International</div>
+      <div class="sport-status">Coming Soon</div>
     </div>
 
-    <div class="sport" onclick="selectSport(this)">
+    <div class="sport disabled">
       <div class="sport-icon">🏆</div>
       <div class="sport-name">College</div>
-      <div class="sport-status">College Sports</div>
+      <div class="sport-status">Coming Soon</div>
     </div>
+
   </div>
 
   <div class="options">
@@ -273,15 +388,64 @@ footer {
     </p>
 
     <div class="sizes">
-      <button class="size-option selected" onclick="selectSize(this)">4 Teams</button>
-      <button class="size-option" onclick="selectSize(this)">8 Teams</button>
-      <button class="size-option" onclick="selectSize(this)">16 Teams</button>
+      <button class="size-option selected" onclick="selectSize(this,4)">4 Teams</button>
+      <button class="size-option" onclick="selectSize(this,8)">8 Teams</button>
+      <button class="size-option" onclick="selectSize(this,16)">16 Teams</button>
     </div>
 
     <button class="primary-button" onclick="startTournament()">
-      CREATE MY TOURNAMENT →
+      SELECT YOUR TEAMS →
     </button>
   </div>
+
+</section>
+
+<section id="selectionScreen" class="selection-panel hidden">
+
+  <div class="selection-top">
+    <div>
+      <h2 style="margin:0 0 7px;">03 / Select Your Teams</h2>
+      <div style="color:var(--muted);font-size:13px;" id="selectionSubtitle">
+        Choose your tournament participants.
+      </div>
+    </div>
+
+    <div class="counter">
+      SELECTED: <strong id="selectedCount">0</strong>
+      / <span id="requiredCount">4</span>
+    </div>
+  </div>
+
+  <div class="team-grid" id="teamGrid"></div>
+
+  <div class="message" id="selectionMessage">
+    Select your teams to fill your tournament.
+  </div>
+
+  <button class="primary-button" id="buildButton" onclick="buildBracket()" disabled>
+    BUILD MY BRACKET →
+  </button>
+
+  <br><br>
+  <button class="secondary-button" onclick="goBack()">← Back to Setup</button>
+
+</section>
+
+<section id="bracketScreen" class="bracket-panel hidden">
+
+  <div class="bracket-title">
+    <div class="hero-label">TOURNAMENT READY</div>
+    <h2 id="bracketHeading">YOUR TOURNAMENT</h2>
+    <p id="bracketSubtitle">First-round matchups</p>
+  </div>
+
+  <div class="matchups" id="matchups"></div>
+
+  <div style="text-align:center;margin-top:25px;">
+    <button class="secondary-button" onclick="goBack()">← Change Teams</button>
+  </div>
+
+</section>
 
 </main>
 
@@ -290,25 +454,306 @@ footer {
 </footer>
 
 <script>
+
+const teams = {
+
+NFL: [
+"Arizona Cardinals",
+"Atlanta Falcons",
+"Baltimore Ravens",
+"Buffalo Bills",
+"Carolina Panthers",
+"Chicago Bears",
+"Cincinnati Bengals",
+"Cleveland Browns",
+"Dallas Cowboys",
+"Denver Broncos",
+"Detroit Lions",
+"Green Bay Packers",
+"Houston Texans",
+"Indianapolis Colts",
+"Jacksonville Jaguars",
+"Kansas City Chiefs",
+"Las Vegas Raiders",
+"Los Angeles Chargers",
+"Los Angeles Rams",
+"Miami Dolphins",
+"Minnesota Vikings",
+"New England Patriots",
+"New Orleans Saints",
+"New York Giants",
+"New York Jets",
+"Philadelphia Eagles",
+"Pittsburgh Steelers",
+"San Francisco 49ers",
+"Seattle Seahawks",
+"Tampa Bay Buccaneers",
+"Tennessee Titans",
+"Washington Commanders"
+],
+
+NBA: [
+"Atlanta Hawks",
+"Boston Celtics",
+"Brooklyn Nets",
+"Charlotte Hornets",
+"Chicago Bulls",
+"Cleveland Cavaliers",
+"Dallas Mavericks",
+"Denver Nuggets",
+"Detroit Pistons",
+"Golden State Warriors",
+"Houston Rockets",
+"Indiana Pacers",
+"LA Clippers",
+"Los Angeles Lakers",
+"Memphis Grizzlies",
+"Miami Heat",
+"Milwaukee Bucks",
+"Minnesota Timberwolves",
+"New Orleans Pelicans",
+"New York Knicks",
+"Oklahoma City Thunder",
+"Orlando Magic",
+"Philadelphia 76ers",
+"Phoenix Suns",
+"Portland Trail Blazers",
+"Sacramento Kings",
+"San Antonio Spurs",
+"Toronto Raptors",
+"Utah Jazz",
+"Washington Wizards"
+],
+
+MLB: [
+"Arizona Diamondbacks",
+"Atlanta Braves",
+"Baltimore Orioles",
+"Boston Red Sox",
+"Chicago Cubs",
+"Chicago White Sox",
+"Cincinnati Reds",
+"Cleveland Guardians",
+"Colorado Rockies",
+"Detroit Tigers",
+"Houston Astros",
+"Kansas City Royals",
+"Los Angeles Angels",
+"Los Angeles Dodgers",
+"Miami Marlins",
+"Milwaukee Brewers",
+"Minnesota Twins",
+"New York Mets",
+"New York Yankees",
+"Oakland Athletics",
+"Philadelphia Phillies",
+"Pittsburgh Pirates",
+"San Diego Padres",
+"San Francisco Giants",
+"Seattle Mariners",
+"St. Louis Cardinals",
+"Tampa Bay Rays",
+"Texas Rangers",
+"Toronto Blue Jays",
+"Washington Nationals"
+],
+
+NHL: [
+"Anaheim Ducks",
+"Boston Bruins",
+"Buffalo Sabres",
+"Calgary Flames",
+"Carolina Hurricanes",
+"Chicago Blackhawks",
+"Colorado Avalanche",
+"Columbus Blue Jackets",
+"Dallas Stars",
+"Detroit Red Wings",
+"Edmonton Oilers",
+"Florida Panthers",
+"Los Angeles Kings",
+"Minnesota Wild",
+"Montreal Canadiens",
+"Nashville Predators",
+"New Jersey Devils",
+"New York Islanders",
+"New York Rangers",
+"Ottawa Senators",
+"Philadelphia Flyers",
+"Pittsburgh Penguins",
+"San Jose Sharks",
+"Seattle Kraken",
+"St. Louis Blues",
+"Tampa Bay Lightning",
+"Toronto Maple Leafs",
+"Utah Mammoth",
+"Vancouver Canucks",
+"Vegas Golden Knights",
+"Washington Capitals",
+"Winnipeg Jets"
+]
+
+};
+
+let selectedSport = "NFL";
+let tournamentSize = 4;
+let selectedTeams = [];
+
 function selectSport(element) {
-  document.querySelectorAll(".sport").forEach(item => {
-    item.classList.remove("selected");
+  document.querySelectorAll(".sport").forEach(sport => {
+    sport.classList.remove("selected");
   });
 
   element.classList.add("selected");
+  selectedSport = element.dataset.sport;
 }
 
-function selectSize(element) {
-  document.querySelectorAll(".size-option").forEach(item => {
-    item.classList.remove("selected");
+function selectSize(element, size) {
+  document.querySelectorAll(".size-option").forEach(button => {
+    button.classList.remove("selected");
   });
 
   element.classList.add("selected");
+  tournamentSize = size;
 }
 
 function startTournament() {
-  alert("Your tournament setup is coming next!");
+  selectedTeams = [];
+
+  document.getElementById("setupScreen").classList.add("hidden");
+  document.getElementById("bracketScreen").classList.add("hidden");
+  document.getElementById("selectionScreen").classList.remove("hidden");
+
+  document.getElementById("selectionSubtitle").textContent =
+    "Choose " + tournamentSize + " teams for your " + selectedSport + " tournament.";
+
+  document.getElementById("requiredCount").textContent = tournamentSize;
+
+  renderTeams();
+  updateCounter();
+
+  window.scrollTo(0,0);
 }
+
+function renderTeams() {
+  const grid = document.getElementById("teamGrid");
+  grid.innerHTML = "";
+
+  teams[selectedSport].forEach(team => {
+    const button = document.createElement("button");
+    button.className = "team";
+    button.textContent = team;
+
+    button.addEventListener("click", () => toggleTeam(team));
+
+    grid.appendChild(button);
+  });
+}
+
+function toggleTeam(team) {
+
+  if (selectedTeams.includes(team)) {
+    selectedTeams = selectedTeams.filter(item => item !== team);
+  } else {
+    if (selectedTeams.length >= tournamentSize) return;
+    selectedTeams.push(team);
+  }
+
+  renderSelectedTeams();
+  updateCounter();
+}
+
+function renderSelectedTeams() {
+  const buttons = document.querySelectorAll(".team");
+
+  buttons.forEach(button => {
+    const team = button.textContent;
+    const selected = selectedTeams.includes(team);
+
+    button.classList.toggle("selected", selected);
+
+    button.innerHTML = selected
+      ? '<span class="team-check">✓</span>' + team
+      : team;
+
+    button.disabled =
+      !selected && selectedTeams.length >= tournamentSize;
+  });
+}
+
+function updateCounter() {
+  document.getElementById("selectedCount").textContent =
+    selectedTeams.length;
+
+  const buildButton = document.getElementById("buildButton");
+
+  buildButton.disabled = selectedTeams.length !== tournamentSize;
+
+  const message = document.getElementById("selectionMessage");
+
+  if (selectedTeams.length === tournamentSize) {
+    message.textContent = "Perfect! Your teams are ready. Let's build the bracket!";
+    message.style.color = "var(--green)";
+  } else {
+    message.textContent =
+      "Choose " + (tournamentSize - selectedTeams.length) +
+      " more team(s) to complete your tournament.";
+    message.style.color = "var(--muted)";
+  }
+}
+
+function buildBracket() {
+
+  if (selectedTeams.length !== tournamentSize) return;
+
+  const shuffled = [...selectedTeams];
+
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  const matchups = document.getElementById("matchups");
+  matchups.innerHTML = "";
+
+  for (let i = 0; i < shuffled.length; i += 2) {
+    const game = document.createElement("div");
+    game.className = "matchup";
+
+    const number = (i / 2) + 1;
+
+    game.innerHTML = `
+      <div class="matchup-label">QUARTERFINAL ${number}</div>
+      <div class="matchup-team"></div>
+      <div class="matchup-team"></div>
+    `;
+
+    game.children[1].textContent = shuffled[i];
+    game.children[2].textContent = shuffled[i + 1];
+
+    matchups.appendChild(game);
+  }
+
+  document.getElementById("bracketHeading").textContent =
+    selectedSport + " CHAMPIONSHIP";
+
+  document.getElementById("bracketSubtitle").textContent =
+    tournamentSize + "-team tournament · First-round matchups";
+
+  document.getElementById("selectionScreen").classList.add("hidden");
+  document.getElementById("bracketScreen").classList.remove("hidden");
+
+  window.scrollTo(0,0);
+}
+
+function goBack() {
+  document.getElementById("selectionScreen").classList.add("hidden");
+  document.getElementById("bracketScreen").classList.add("hidden");
+  document.getElementById("setupScreen").classList.remove("hidden");
+
+  window.scrollTo(0,0);
+}
+
 </script>
 
 </body>
