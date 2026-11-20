@@ -255,11 +255,15 @@ h2 { margin-top: 0; font-size: 21px; }
 
 /* TOURNAMENT BRACKET */
 
+
 #bracketRounds {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
   padding: 20px 5px 30px;
 }
-
 
 .bracket-layout {
   position: relative;
@@ -268,8 +272,10 @@ h2 { margin-top: 0; font-size: 21px; }
   gap: 35px;
   width: max-content;
   min-width: 100%;
+  box-sizing: border-box;
   padding: 10px 25px 25px;
 }
+
 
 
 .bracket-connectors {
