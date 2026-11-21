@@ -1699,7 +1699,7 @@ function renderBracket() {
         result.textContent = "✓ FINAL";
         card.appendChild(result);
 
-        if (selectedSport==="NFL") {
+        if (selectedSport==="NFL" || selectedSport==="NHL") {
           const boxButton = document.createElement("button");
           boxButton.className = "box-score-button";
           boxButton.textContent = "VIEW BOX SCORE";
