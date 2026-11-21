@@ -1429,11 +1429,11 @@ function getTournamentMVP() {
 
   players.forEach(player => {
     if (player.position === "QB") {
-      player.mvpPoints =
-        player.passYards / 25 +
-        player.passTD * 4 -
-        player.interceptions * 2;
-    } else if (player.position === "RB") {
+  player.mvpPoints =
+    player.passYards / 25 +
+    player.passTD * 5 -
+    player.interceptions * 2.5;
+} else if (player.position === "RB") {
       player.mvpPoints =
         player.rushYards / 10 +
         player.rushTD * 6;
@@ -1500,13 +1500,13 @@ function getNHLTournamentMVP() {
 
   players.forEach(player => {
     if (player.position === "G") {
-      player.mvpPoints = player.saves * 0.5;
-    } else {
-      player.mvpPoints =
-        player.goals * 4 +
-        player.assists * 2 +
-        player.shots * 0.2;
-    }
+  player.mvpPoints = player.saves * 0.25;
+} else {
+  player.mvpPoints =
+    player.goals * 5 +
+    player.assists * 3 +
+    player.shots * 0.25;
+}
   });
 
   return players.sort((a,b) => b.mvpPoints - a.mvpPoints)[0];
